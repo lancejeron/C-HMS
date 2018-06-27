@@ -1,0 +1,59 @@
+html
+    head
+        //- link(rel='icon', type='image/png', href='/assets/images/upload_images/logo.ico')
+        title Coffeemate!
+
+        link(rel="stylesheet" href="/assets/bulma/bulma.css")
+        link(rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.1/css/mdb.min.css")
+        link(rel="stylesheet" href="semantic/dist/semantic.min.css")
+        script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
+        script(src='semantic/dist/semantic.min.js')
+        link(rel="stylesheet" href="/assets/font-awesome-4.7.0/css/masterpug_bg.css")
+        link(rel="stylesheet" href="/assets/font-awesome-4.7.0/css/secondary_bg.css")
+
+    body
+        nav.navbar.navbar-expand-lg.container-fluid
+            a.navbar-item(href="/home/page/1")
+              //- i.fa.fa-shopping-cart
+              | &nbsp Home
+            div.navbar-brand
+                a.navbar-item(href="/categories")  Searchbar
+            div.navbar-brand
+                a.navbar-item(href="/profile") Profile
+            div.navbar-brand
+                a.navbar-item(href="/sell") Coffeemates!
+            div.navbar-end
+                div.navbar-item.has-dropdown.is-hoverable
+                    a.navbar-item
+                      i.fa.fa-cogs
+                      | &nbsp Settings
+                      b &nbsp V
+                      | &nbsp
+                    div.navbar-dropdown.is-right
+                        a.navbar-item(href="/home/rules") Rules
+                        a.navbar-item(href="/home/help") Help
+                        a.navbar-item(href="/login") Log-Out
+        section
+          .hero-body
+              div.container
+                #wrapper
+                  section.herocont
+                    .hero-body
+                      #wrapper
+                        div#w74
+                          block content
+                  br
+                  br
+
+    div.container
+        #footer
+          .container
+            .content.has-text-centered
+              p(style='color:white;')
+                b PUP Student Market
+                | &nbspis a project made by&nbsp
+                b PSM Team
+              p(style='color:white;')
+                b Contact Us:
+                | &nbsppsm.sup.adm@gmail.com

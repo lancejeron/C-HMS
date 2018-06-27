@@ -1,0 +1,16 @@
+extends ../../../templates/navbarclient.pug
+
+//- block content
+//-     each user in usertab
+//-         h3 Welcome to PUP Student Market, #{user.strFName}
+
+block content
+    //- <<Header>>
+    each user in usertab
+      h1.mt-5 Welcome to CHMS, #{user.strFName}
+      hr
+    //- <</Header>>
+    //- <<Main content>>
+    
+    //- <</Main content>>
+
