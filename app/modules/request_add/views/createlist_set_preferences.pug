@@ -1,0 +1,75 @@
+extends ../../../templates/navbarclient.pug
+block content
+    .right_col(role='main')
+        
+            .page-title
+                .title_left
+                    h3
+                .clearfix
+                .row
+                    .col-md-12.col-sm-12.col-xs-12
+                        .x_panel
+                            .x_panel
+                                .x_title
+                                    h1 Add service to list
+                                    .clearfix
+                                .x_content
+                                    br
+                                    .x_panel(style='background-color:#f2f2f2')
+                                        | 
+                                        b Disclaimer!
+                                        ul
+                                    each list in listtab
+                                        form(method='POST', action='add_to_mylist_'+list.intRequestID).form-horizontal
+                                            .form-group
+                                                label.control-label.col-md-5.col-sm-3.col-xs-12
+                                                    | Service:
+                                                    span.required
+                                                .col-md-2.col-sm-9.col-xs-12
+                                                    select(name='service').form-control
+                                                        each service in servicetab
+                                                            option(value=''+service.intID) #{service.strName}
+                                            .form-group
+                                                label.control-label.col-md-5.col-sm-12.col-xs-12
+                                                    | Quantity
+                                                    span.required
+                                                .col-xs-1
+                                                    input.form-control(type='number' name='quantity' min='1', max='10' value='1' required)
+                                            .form-group
+                                                label.control-label.col-md-5.col-sm-12.col-xs-12
+                                                    | Age (From - To):
+                                                    span.required
+                                                .col-xs-1
+                                                    input.form-control(type='number' name='age1' min='18', max='100' value='18' required)
+                                                .col-xs-1
+                                                    input.form-control(type='number' name='age2' min='18', max='100' value='18' required)   
+                                            .form-group
+                                                label.control-label.col-md-5.col-sm-3.col-xs-12
+                                                    | Gender:
+                                                    span.required
+                                                .col-md-2.col-sm-9.col-xs-12
+                                                    select(name='gender').form-control
+                                                        option(value='Any') Any
+                                                        option(value='Male') Male
+                                                        option(value='Female') Female
+                                            .form-group
+                                                label.control-label.col-md-5.col-sm-3.col-xs-12
+                                                    | Highest Educational Attainment:
+                                                    span.required
+                                                .col-md-2.col-sm-9.col-xs-12
+                                                    select.form-control(name='educ')
+                                                        option(value='Elementary') Elementary
+                                                        option(value='High School') High School
+                                                        option(value='College') College
+                                                        option(value='Vocational') Vocational
+                                            .form-group
+                                                label.control-label.col-md-5.col-sm-3.col-xs-12
+                                                    | Work Experience (at least):
+                                                    span.required
+                                                .col-md-2.col-sm-6.col-xs-12
+                                                    input#first-name.form-control.col-md-7.col-xs-12(type='number' name='workexp' value='0')     
+                                            .form-group.pull-right
+                                                .col-md-12.col-sm-9.col-xs-12.pull-right
+                                                    a(href='/request_add')
+                                                        button.btn.btn-danger.btn-lg(type='button') Cancel
+                                                    button.btn.btn-success.btn-lg(type='submit') Submit

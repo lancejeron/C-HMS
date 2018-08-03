@@ -1,0 +1,86 @@
+extends ../../../templates/navbarclient.pug
+
+block content
+    .right_col(role='main')
+        .page-title
+            .title_left
+                h1
+                    b
+            .clearfix
+            .row
+                .col-md-12.col-sm-12.col-xs-12
+                    .x_panel
+                        .x_panel
+                            .col-md-4.col-sm-5.col-xs-12.form-group.pull-right.top_search
+                                .input-group
+                                    input.form-control(type='text', placeholder='Search for...')
+                                    span.input-group-btn
+                                        button.btn.btn-default(type='button') Go!
+                            .x_title
+                                h1  Add Household Worker 
+                                .clearfix
+                            br
+                            .x_panel(style='background-color:#f2f2f2')
+                                | &nbsp&nbsp&nbsp&nbsp&nbsp
+                                b Disclaimer!
+                                ul
+                                    li
+                                        | To add Household Worker you must create first a list of your service/s to be requested.
+                                        br
+                                    li
+                                        | Or add to your current pending list of services.
+                            br
+                            br
+                            .x_content
+                                center
+                                    a(href='/request_add/createlist_services')
+                                        button.btn.btn-success.btn-lg(type='button')
+                                            i.fa.fa-plus
+                                            | &nbspCreate New List
+                                // <center><h2>You currently have no list ...</h2></center>
+                                br
+                                .row
+                                    .col-md-12
+                                        .x_content
+                                            .row
+                                                .col-md-12.col-sm-12.col-xs-12.text-center
+                                                .clearfix
+                                                each list in listtab
+                                                    .col-md-4.col-sm-4.col-xs-12.profile_details
+                                                        .well.profile_view
+                                                            .col-sm-12
+                                                                h3.brief #{list.strRequestName}
+                                                                .left.col-sm-12
+                                                                    br
+                                                                    ul.list-unstyled
+                                                                        li
+                                                                            strong List no: 
+                                                                            |  #{list.intRequestID}
+                                                                        li
+                                                                            strong Date created: 
+                                                                            |  #{list.datRequestDate}
+                                                                        li
+                                                                            strong Status: 
+                                                                            |  #{list.strRequestStatus}
+                                                            .col-xs-12.bottom.text-center
+                                                                a(href='/request_add/mylist_'+list.intRequestID)
+                                                                    button.btn.btn-info(type='button') View
+                                                                button.btn.btn-danger(type='button', data-toggle='modal', data-target='#ListDelete3') delete
+    // Small modal
+    //- #ListDelete3.modal.fade.bs-example-modal-sm(tabindex='-1', role='dialog', aria-hidden='true')
+    //-     .modal-dialog.modal-sm
+    //-         .modal-content
+    //-             .modal-header
+    //-                 button.close(type='button', data-dismiss='modal', aria-label='Close')
+    //-                     span(aria-hidden='true') ×
+    //-                 h4#myModalLabel2.modal-title
+    //-             .modal-body
+    //-                 h3
+    //-                     b Warning!!!
+    //-                 br
+    //-                 p
+    //-                     big Are you sure you want to delete this list?
+    //-             .modal-footer.center
+    //-                 button.btn.btn-primary(type='button', data-dismiss='modal') No
+    //-                 button.btn.btn-primary(type='button') Yes
+        // /modals

@@ -1,0 +1,43 @@
+extends ../../../templates/navbaradmin.pug
+
+block content
+    .right_col(role='main')
+        .title_left
+            h5
+                | Transaction / Client / 
+                b Requests
+            .clearfix
+            .row
+                .col-md-12.col-sm-12.col-xs-12
+                    .x_panel
+                        br
+                        .x_panel(style='background-color:#f2f2f2')
+                            | &nbsp&nbsp&nbsp&nbsp&nbsp
+                            b Disclaimer!
+                            ul
+                                li
+                                    | Click 
+                        br
+                        br
+                        table#datatable.table.table-striped.table-bordered
+                            thead
+                                tr
+                                    th ID
+                                    th NAME
+                                    th REQUEST
+                                    th DATE REQUESTED
+                                    th STATUS
+                                    th ACTION
+                            tbody
+                                each request in requesttab
+                                    tr
+                                        td #{request.intRequestID}
+                                        td #{request.strName}
+                                        td #{request.strRequestType}
+                                        td #{request.datRequestDate}
+                                        td #{request.strRequestStatus}
+                                        td
+                                            a(href='transaction_client_request_'+request.intRequestID)
+                                                button.btn.btn-info(type='button')
+                                                    i.fa.fa-eye
+                                                    | &nbspview

@@ -1,0 +1,40 @@
+extends ../../../templates/navbaradmin.pug
+
+block content
+    .right_col(role='main')
+        .title_left
+            h5
+                | Transaction / Settlement / 
+                b Finished Transaction
+            .clearfix
+            .row
+                .col-md-12.col-sm-12.col-xs-12
+                    .x_panel
+                        br
+                        .x_title
+                            h1
+                                b Finished Transaction
+                        br
+                        br
+                        .x_panel
+                            table#datatable.table.table-striped.table-bordered
+                                thead
+                                    tr
+                                        th ID NO.
+                                        th NAME
+                                        th REQUEST
+                                        th DATE REQUESTED
+                                        th STATUS
+                                        th ACTION
+                                tbody
+                                    tr
+                                        td 10001
+                                        td Alexis Castro
+                                        td Add
+                                        td July 2 2018
+                                        td Finished
+                                        td
+                                            a(href='transaction_client_request_')
+                                                button.btn.btn-info(type='button')
+                                                    i.fa.fa-eye
+                                                    |   View

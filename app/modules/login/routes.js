@@ -27,9 +27,9 @@ router.post('/', (req, res) => {
         else if(req.body.password === results[0].strPassword){
           req.session.user = results[0].intID;
           if(results[0].strType != 'Admin' && results[0].strType != 'Household Worker')
-            res.redirect('/home');
+            res.redirect('/home_client');
           else if(results[0].strType != 'Admin' && results[0].strType != 'Client')
-            res.redirect('/home2');
+            res.redirect('/home_householdworker');
           else if(results[0].strType != 'Household Worker' && results[0].strType != 'Client')
             res.redirect('/admin');
         }

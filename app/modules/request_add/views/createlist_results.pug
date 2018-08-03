@@ -1,0 +1,134 @@
+extends ../../../templates/navbarclient.pug
+block content
+    .right_col(role='main')
+        .page-title
+            .title_left
+                h1
+                    b
+            .clearfix
+            .row
+                .col-md-12.col-sm-12.col-xs-12
+                    .x_panel
+                        .x_panel
+                            .x_title
+                                h1 Create List
+                                .clearfix
+                            .x_title
+                                center
+                                    h3
+                                        b Type of Service: ( 1 of 2 )
+                                    h1 Housemaid
+                            .row
+                                .col-md-12
+                                    .x_content
+                                        .row
+                                            .col-md-12.col-sm-12.col-xs-12.text-center
+                                                ul.pagination.pagination-split.pull-left
+                                                    li
+                                                        b
+                                                            h3 See results here:
+                                            .col-md-12.col-sm-12.col-xs-12
+                                                .table-responsive
+                                                    table.table.table-striped.jambo_table.bulk_action
+                                                        thead
+                                                            tr.headings
+                                                                th.column-title EMPLOYEE NO. 
+                                                                th.column-title TYPE OF SERVICE 
+                                                                th.column-title AGE 
+                                                                th.column-title GENDER 
+                                                                th.column-title WORK EXPERIENCE 
+                                                                th.column-title EDUCATION 
+                                                                th.column-title.no-link.last
+                                                                    span.nobr ACTION
+                                                                th.bulk-actions(colspan='7')
+                                                                    a.antoo(style='color:#fff; font-weight:500;')
+                                                                        | Bulk Actions ( 
+                                                                        span.action-cnt  
+                                                                        |  ) 
+                                                                        i.fa.fa-chevron-down
+                                                        tbody
+                                                            tr.even.pointer
+                                                                td 121000040
+                                                                td Housemaid
+                                                                td 25
+                                                                td Female
+                                                                td 3 yrs.
+                                                                td High School
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                                            tr.odd.pointer
+                                                                td 121000039
+                                                                td Housemaid
+                                                                td 38
+                                                                td Female
+                                                                td 5 yrs.
+                                                                td High School
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                                            tr.even.pointer
+                                                                td 121000038
+                                                                td Housemaid
+                                                                td 32
+                                                                td Female
+                                                                td 1 yrs.
+                                                                td High School
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                                            tr.odd.pointer
+                                                                td 121000037
+                                                                td Housemaid
+                                                                td 45
+                                                                td Female
+                                                                td 5 yrs.
+                                                                td Elementary
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                                            tr.even.pointer
+                                                                td 121000040
+                                                                td Housemaid
+                                                                td 28
+                                                                td Female
+                                                                td 1 yrs.
+                                                                td High School
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                                            tr.odd.pointer
+                                                                td 121000039
+                                                                td Housemaid
+                                                                td 32
+                                                                td Female
+                                                                td 3 yrs.
+                                                                td High School
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                                            tr.even.pointer
+                                                                td 121000038
+                                                                td Housemaid
+                                                                td 20
+                                                                td Female
+                                                                td 1 yrs.
+                                                                td Elementary
+                                                                td(<a='', href='#')
+                                                                    button.btn.btn-info.btn-xs(type='button')
+                                                                        i.fa.fa-plus
+                                                                        | &nbsp&nbspadd to list
+                                            .form-group.pull-right
+                                                .col-md-12.col-sm-9.col-xs-12.pull-right
+                                                    br
+                                                    br
+                                                    button.btn.btn-primary.btn-lg(type='button') Cancel
+                                                    button.btn.btn-primary.btn-lg(type='reset') Back
+                                                    a(href='/request_add/createlist_summary')
+                                                        button.btn.btn-success.btn-lg(type='submit') Next

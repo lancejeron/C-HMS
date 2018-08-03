@@ -1,0 +1,294 @@
+extends ../../../templates/navbarclient.pug
+block content
+    .right_col(role='main')
+        div
+            .clearfix
+            .row
+                .col-md-12
+                    .x_panel
+                        .x_panel
+                            .x_title
+                                each list in listtab
+                                    h1 My List: "#{list.strRequestName}"
+                                    .clearfix
+                            .x_panel(style='background-color:#f2f2f2')
+                                | &nbsp&nbsp&nbsp&nbsp&nbsp
+                                b Disclaimer!
+                                ul
+                                    li
+                                        | Select services that already 
+                                        b approved
+                                        |  your request before proceeding to the next process.
+                            br
+                            each list in listtab
+                                button.btn.btn-success.btn-lg(type='button' data-toggle="modal" data-target="#Add")
+                                    i.fa.fa-plus
+                                    | &nbspAdd Service
+                                br
+                                each count in counttab
+                                    if (list.strRequestStatus == 'Draft' && count.count != 0)
+                                        a(href='/request_add/submit_request_'+list.intRequestID)
+                                            button.btn.pull-right.btn-success.btn-lg(type='button')
+                                                i.fa.fa-check
+                                                |   Submit Request
+                                    else if list.strRequestStatus == 'On process'     
+                            br
+                            h2 Services:
+                            table.table.jambo_table.bulk_action
+                                thead
+                                    tr
+                                        th Number
+                                        th Service
+                                        th Quantity
+                                        th Approved
+                                        th Reject
+                                        th Action
+                                tbody
+                                each item in itemtab
+                                    each list in listtab  
+                                        tr
+                                            td #{item.intIRequest_No}
+                                            td #{item.strName}
+                                            td #{item.intIQuantity}
+                                            td 
+                                            td 
+                                            td
+                                                button.btn.btn-info.btn-xs(type='button' data-toggle="modal" data-target="#view_item"
+                                                                        , data-requestno=item.intIRequest_No, data-servicename=item.strName, data-quantity=item.intIQuantity, data-gender=item.strIRequestGender, data-educ=item.strIRequestEduc, data-exp=item.intIRequestExp
+                                                                        ) View
+                                                    if list.strRequestStatus == 'Not Sent'
+                                                        button.btn.btn-warning.btn-xs(type='button' data-toggle="modal" data-target="#edit_item") Edit
+                                                    else if list.strRequestStatus == 'On-going'
+                                                button.btn.btn-danger.btn-xs(type='button' data-toggle="modal" data-target="#remove_item") Delete
+                        h3 Results:
+                        .clearfix
+                            each hw in hwtab
+                                .col-md-4.col-sm-4.col-xs-12.profile_details
+                                    form#demo-form2.form-horizontal.form-label-left(method="POST" action="/request_add/decision_"+hw.intRRequest_No)
+                                        input.form-control.col-md-7.col-xs-12(type='text', id='_id', required='required', name='hwid', value=''+hw.intRHWID, style="display:none;")
+                                        input.form-control.col-md-7.col-xs-12(type='text', id='_id', required='required', name='transid', value=''+hw.intRRequestID, style="display:none;")                              
+                                        .well.profile_view
+                                            .col-sm-12
+                                                h4.brief
+                                                    i #{hw.strName}
+                                                .left.col-xs-7
+                                                    h2 #{hw.strFName} #{hw.strLName}
+                                                    p
+                                                        | Age:
+                                                        strong  #{hw.age} 
+                                                    ul.list-unstyled
+                                                        li
+                                                            | Gender: 
+                                                            b #{hw.strGender}
+                                                        li
+                                                            | Working Experience: 
+                                                            b 
+                                                        li
+                                                            | Education: 
+                                                            b 
+                                                .right.col-xs-5.text-center
+                                                    img.img-circle.img-responsive(src='../images/'+hw.strPicture, alt='', style='width:100px; height:100px')
+                                            if hw.strRClientStatus == 'Waiting'
+                                                .col-xs-12.bottom.text-center
+                                                    //- .col-xs-12.col-sm-4.emphasis
+                                                    //-     .x_panel
+                                                    //-         input#check-all.flat(type='checkbox')
+                                                    .col-xs-12.col-sm-12.emphasis
+                                                        a(href='hw_profile_'+hw.intRRequestID+hw.intRHWID)
+                                                            button.btn.btn-primary(type='button')
+                                                                i.fa.fa-user  
+                                                                |  View Profile
+                                                        button.btn.btn-success(type='submit' name='btn1' value='approve')
+                                                            i.fa.fa-check  
+                                                            |  Approve
+                                                        button.btn.btn-danger(type='submit' name='btn1' value='reject')
+                                                            i.fa.fa-times  
+                                                            |  Reject
+                                            else if hw.strRClientStatus == 'Approved'
+                                                .col-xs-12.col-sm-4.emphasis
+                                                    .x_panel
+                                                        input#check-all.flat(type='checkbox')
+                                                .col-xs-12.col-sm-8.emphasis
+                                                    a(href='hw_profile_'+hw.intRRequestID+hw.intRHWID)
+                                                        button.btn.btn-primary(type='button')
+                                                            i.fa.fa-user  
+                                                            |  View Profile
+                                            else if hw.strRClientStatus == 'Rejected'
+                                                .col-xs-12.bottom.text-center
+                                                    //- .col-xs-12.col-sm-4.emphasis
+                                                    //-     .x_panel
+                                                    //-         input#check-all.flat(type='checkbox')
+                                                    .col-xs-12.col-sm-12.emphasis
+                                                        a(href='hw_profile_'+hw.intRRequestID+hw.intRHWID)
+                                                            button.btn.btn-primary(type='button')
+                                                                i.fa.fa-user  
+                                                                |  View Profile
+                                                        button.btn.btn-warning(type='submit' name='btn1' value='revert')
+                                                            i.fa.fa-refresh  
+                                                            |  Revert
+                                                
+                                        
+                        .form-group.pull-right
+                            .col-md-12.col-sm-9.col-xs-12.pull-right
+                                br
+                                a(href='/request_add')
+                                    button.btn.btn-primary.btn-lg(type='button') Back
+                                a(href='/deployment')
+                                    button.btn.btn-success.btn-lg(type='submit') Proceed to Deployment Process
+    // Small modal
+    #myListCancel1.modal.fade.bs-example-modal-sm(tabindex='-1', role='dialog', aria-hidden='true')
+        .modal-dialog.modal-sm
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4#myModalLabel2.modal-title
+                .modal-body
+                    h3
+                        center
+                            b Warning!!!
+                    p
+                        center
+                            big Are you sure you want to cancel request in this household worker?
+                .modal-footer
+                    button.btn.btn-primary(type='button', data-dismiss='modal') No
+                    button.btn.btn-primary(type='button') Yes
+    // /modals
+
+    // Add Service Modal
+    #Add.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-hidden='true')
+        .modal-dialog.modal-lg
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                    h4#myModalLabel.modal-title Add Service
+                .modal-body
+                    .x_panel
+                        .x_content
+                            br
+                            each list in listtab
+                                form(method='POST', action='add_to_mylist_'+list.intRequestID).form-horizontal
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-3.col-xs-12
+                                            | Service:
+                                            span.required
+                                        .col-md-2.col-sm-9.col-xs-12
+                                            select#skil(name='service').form-control
+                                                each service in servicetab
+                                                    option(value=''+service.intID) #{service.strName}
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-12.col-xs-12
+                                            | Quantity
+                                            span.required
+                                        .col-xs-1
+                                            input.form-control(type='number' name='quantity' min='1', max='10' value='1' required)
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-12.col-xs-12
+                                            | Age (From - To):
+                                            span.required
+                                        .col-xs-2
+                                            input.form-control(type='number' name='age1' min='18', max='100' value='18' required)
+                                        .col-xs-2
+                                            input.form-control(type='number' name='age2' min='18', max='100' value='18' required)   
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-3.col-xs-12
+                                            | Gender:
+                                            span.required
+                                        .col-md-2.col-sm-9.col-xs-12
+                                            select(name='gender').form-control
+                                                option(value='Any') Any
+                                                option(value='Male') Male
+                                                option(value='Female') Female
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-3.col-xs-12
+                                            | Highest Educational Attainment:
+                                            span.required
+                                        .col-md-2.col-sm-9.col-xs-12
+                                            select.form-control(name='educ')
+                                                option(value='Elementary') Elementary
+                                                option(value='High School') High School
+                                                option(value='College') College
+                                                option(value='Vocational') Vocational
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-3.col-xs-12
+                                            | Work Experience (at least):
+                                            span.required
+                                        .col-md-2.col-sm-6.col-xs-12
+                                            input#first-name.form-control.col-md-7.col-xs-12(type='number' name='workexp' value='0')     
+                                    .x_panel
+                                        br
+                                        h5 Other Attributes : 
+                                        br  
+                                        //- .form-group
+                                        //- each skill in skilltab
+                                        //-     .form-group
+                                        //-         .checkbox
+                                        //-             label
+                                        //-                 input.flat(id=''+skill.intID, type='checkbox')
+                                        //-                 |  #{skill.strName}
+                                        .form-group.pull-right
+                                            .col-md-12.col-sm-9.col-xs-12.pull-right
+                                                button.btn.btn-danger.btn-lg(type='button'  data-dismiss='modal') Cancel
+                                                button.btn.btn-success.btn-lg(type='submit') Submit
+
+    
+    // View Item Modal
+    #view_item.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-hidden='true')
+        .modal-dialog.modal-sm
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                    h4
+                        b Number: 
+                        i#a
+                .modal-body
+                    .tile-stats
+                        ul
+                            li 
+                                b Type Of Service:
+                                i#b
+                            li 
+                                b Quantity:
+                                i#c
+                            li Age:
+                            li 
+                                b Gender:
+                                i#d
+                            li 
+                                b Educational Attainment:
+                                i#e
+                            li 
+                                b Work Experience:
+                                i#f
+
+
+                            //- .col-md-4.col-sm-4.col-xs-12.profile_details
+                            //-     .well.profile_view
+                            //-         .col-sm-12
+                            //-             h4.brief
+                            //-                 i Housemaid
+                            //-             .left.col-xs-7
+                            //-                 h5.brief Number: 1
+                            //-                 h2 Nicole Pearson
+                            //-                 //- p
+                            //-                 //-     strong About: 
+                            //-                 //-     |  Web Designer / UX / Graphic Artist / Coffee Lover
+                            //-                 ul.list-unstyled
+                            //-                     li
+                            //-                         i.fa.fa-building
+                            //-                         |  Address:
+                            //-                     li
+                            //-                         i.fa.fa-phone
+                            //-                         |  Phone #:
+                            //-             .right.col-xs-5.text-center
+                            //-                 img.img-circle.img-responsive(src='images/img.jpg', alt='')
+                            //-         .col-xs-12.bottom
+                            //-             .col-xs-12
+                            //-                 center
+                            //-                     button.btn.btn-primary.btn-xs(type='button')
+                            //-                         i.fa.fa-user  
+                            //-                         |  View Profile
+                            //-                     br
+                            //-                     input.flat(type='checkbox')

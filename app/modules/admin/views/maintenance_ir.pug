@@ -14,15 +14,16 @@ block content
                     .col-md-12.col-sm-12.col-xs-12
                         .x_panel
                             .x_content
-                            center
-                                button.btn.btn-success.btn-lg(type='button', data-toggle='modal', data-target='.bs-add-modal-lg')
-                                    i.fa.fa-plus
-                                    | &nbspAdd
+                            button.btn.btn-success.btn-lg(type='button', data-toggle='modal', data-target='.bs-add-modal-xs')
+                                i.fa.fa-plus
+                                | &nbspAdd
+                            br
+                            br
                             table#datatable.table.table-striped.table-bordered
                                 thead
                                     tr
-                                        th ID NO.
-                                        th TYPE OF INCIDENT REPORT
+                                        //- th ID NO.
+                                        th INCIDENT REPORT
                                         th DESCRIPTION
                                         th STATUS
                                         th ACTION
@@ -30,7 +31,7 @@ block content
                                     each item in itemtab
                                         tr
                                         
-                                            td #{item.intID}
+                                            //- td #{item.intID}
                                             td #{item.strName}
                                             td #{item.strDesc}
                                             td #{item.strStatus}
@@ -39,7 +40,7 @@ block content
                                                 //- button.btn.btn-info(type='button')
                                                     i.fa.fa-eye
                                                     |   View
-                                                button.btn.btn-primary(type='button', id=''+item.intID, name=''+item.strName, value=''+item.strDesc, data-toggle='modal', data-target='.bs-edit-modal-lg', onclick="copyID(this.id), copyID2(this.id), copyName(this.name), copyValue(this.value);" )
+                                                button.btn.btn-primary(type='button', id=''+item.intID, name=''+item.strName, value=''+item.strDesc, data-toggle='modal', data-target='.bs-edit-modal-xs', onclick=" copyID2(this.id), copyName(this.name), copyValue(this.value);" )
                                                     i.fa.fa-edit
                                                     |   Edit
                                                 if item.strStatus=='Active'
@@ -53,8 +54,8 @@ block content
                                                             i.fa.fa-toggle-on
                                                             |   Enable
                 //- Add
-                .modal.fade.bs-add-modal-lg(tabindex='-1', role='dialog', aria-hidden='true')
-                    .modal-dialog.modal-lg
+                .modal.fade.bs-add-modal-xs(tabindex='-1', role='dialog', aria-hidden='true')
+                    .modal-dialog.modal-xs
                         .modal-content
                             .modal-header
                                 button.close(type='button', data-dismiss='modal')
@@ -75,15 +76,13 @@ block content
                                     .col-md-9.col-sm-9.col-xs-12
                                         textarea.form-control(rows='3', placeholder='Add a description...' ,name='incidentdesc')
                                 .ln_solid
-                                .form-group
-                                    .col-md-6.col-sm-6.col-xs-12.col-md-offset-3
-                                        button.btn.btn-warning(type='reset') Reset
-                                        button.btn.btn-success(type='submit') Add
-                            .modal-footer
-                                button.btn.btn-danger(type='button', data-dismiss='modal') Cancel
+                                .form-group.pull-right
+                                    button.btn.btn-warning(type='reset') Reset
+                                    button.btn.btn-success(type='submit') Add
+                                    button.btn.btn-danger(type='button', data-dismiss='modal') Cancel
                 //- Edit
-                .modal.fade.bs-edit-modal-lg(tabindex='-1', role='dialog', aria-hidden='true')
-                    .modal-dialog.modal-lg
+                .modal.fade.bs-edit-modal-xs(tabindex='-1', role='dialog', aria-hidden='true')
+                    .modal-dialog.modal-xs
                         .modal-content
                             .modal-header
                                 button.close(type='button', data-dismiss='modal')
@@ -92,11 +91,7 @@ block content
                             .modal-body
                                 form#demo-form2.form-horizontal.form-label-left(method="POST" action="edit_incidentreport")
                                     .form-group
-                                        label.control-label.col-md-3.col-sm-3.col-xs-12
-                                            | ID
-                                            span.required *
                                         .col-md-6.col-sm-6.col-xs-12
-                                            input.form-control.col-md-7.col-xs-12(type='text', id='txt1', required='required', disabled)
                                             input.form-control.col-md-7.col-xs-12(type='text', id='txt11', required='required', name='incidentID' style="display:none;")                          
                                     .form-group
                                         label.control-label.col-md-3.col-sm-3.col-xs-12
@@ -111,25 +106,15 @@ block content
                                         .col-md-9.col-sm-9.col-xs-12
                                             textarea.form-control(rows='3', id='txt3', name='incidentdesc')
                                     .ln_solid
-                                    .form-group
-                                        .col-md-6.col-sm-6.col-xs-12.col-md-offset-3
-                                            button.btn.btn-success(type='submit') Update
-                                .modal-footer
-                                    button.btn.btn-danger(type='button', data-dismiss='modal') Cancel
+                                    .form-group.pull-right
+                                        button.btn.btn-success(type='submit') Update
+                                        button.btn.btn-danger(type='button', data-dismiss='modal') Cancel
 
             // /page content
-        // footer content
-        footer
-            .pull-right
-                | Mega Pacific Employment Services 2017
-            .clearfix
-        // /footer content
+
 
         //- for update
         script(type='text/javascript').
-            function copyID(clicked_id) {
-                document.getElementById("txt1").value = clicked_id;
-            }
              function copyID2(clicked_id) {
                 document.getElementById("txt11").value = clicked_id;
             }

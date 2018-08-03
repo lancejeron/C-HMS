@@ -1,0 +1,156 @@
+extends ../../../templates/navbaradmin.pug
+
+block content
+    .right_col(role='main')
+        div
+            .clearfix
+            .row
+                .col-md-12
+                    .x_panel
+                        .x_panel
+                            .x_title
+                                //- h1 Client's Profile
+                                .clearfix
+                            .x_panel(style='background-color:#f2f2f2')
+                                .col-md-4
+                                    br
+                                    br
+                                    .x_panel
+                                        .profile_img
+                                            #crop-avatar(align='center')
+                                                // Current avatar
+                                                img.img-responsive.avatar-view(style='height:250px', src='/assets/gentelella/production/images/alexis.jpg', alt='Avatar', title='Change the avatar')
+                                .col-md-8(align='left')
+                                    .x_panel
+                                        .x_title
+                                            center
+                                                h3
+                                                    b Client's Profile
+                                                table.table
+                                                    each client in clienttab
+                                                        br
+                                                        thead
+                                                            tr
+                                                                td
+                                                                    b ID No:
+                                                                td #{client.intID}
+                                                            tr
+                                                                td
+                                                                    b Name:
+                                                                td #{client.strName}
+                                                            tr
+                                                                td
+                                                                    b Contact no:
+                                                                td #{client.strContact}
+                                                            tr
+                                                                td
+                                                                    b Email address:
+                                                                td #{client.strEmail}
+                                                            tr
+                                                                td
+                                                                    b Home address:
+                                                                td #{client.strPAddress} 
+                                                            tr
+                                                                td
+                                                                    b Office address:
+                                                                td #{client.strOAddress}
+                                                br
+                                        .x_panel
+                                            .x_panel
+                                                each list in listtab
+                                                    p *Job Description: #{list.strRequestDesc}
+                                            table.table.table-bordered
+                                                thead
+                                                    tr
+                                                        th Service Requested
+                                                        th Qty
+                                                        th Approved
+                                                        th Rejected
+                                                tbody
+                                                    tr
+                                                        td Housemaid
+                                                        td 1
+                                                        td 1
+                                                        td 0
+                            br
+                            h2 Services:
+                            each request in requesttab
+                                .animated.flipInY.col-lg-3.col-md-3.col-sm-6.col-xs-12
+                                    .tile-stats
+                                        h3 Number: #{request.intIRequest_No}
+                                        br
+                                        ul
+                                            li Type Of Service: #{request.strName}
+                                            li Age: #{request.intIRequestAge1} - #{request.intIRequestAge2}
+                                            li Gender: #{request.strIRequestGender}
+                                            li Educational Attainment: #{request.strIRequestEduc}
+                                            li Work Experience: #{request.intIRequestExp}
+                                        br
+                                        center
+                                            each list in listtab
+                                                a(href='transaction_result_'+list.intRequestID+request.intIRequest_No)
+                                                    button.btn.btn-primary(type='button') Search Results
+                            .x_panel
+                                center
+                                     button.btn.btn-primary(type='button') Send to Household Worker Approval
+                                     button.btn.btn-success(type='button') Send to Client Approval
+                                br
+                                .row
+                                    table#datatable-checkbox.table.table-striped.table-bordered.bulk_action
+                                        thead
+                                            tr
+                                                th
+                                                    input#check-all.flat(type='checkbox')
+                                                th ID
+                                                th Request No
+                                                th Name
+                                                th Service
+                                                th Household Worker's Approval
+                                                th Client's Approval
+                                                th Action
+                                        tbody
+                                            tr
+                                                td
+                                                    input#check-all.flat(type='checkbox')
+                                                td 10001
+                                                td 1
+                                                td Jane Doe
+                                                td House Maid
+                                                td 
+                                                td 
+                                                td 
+                                                    button.btn.btn-danger(type='button') Remove
+                                            tr
+                                                td
+                                                    input#check-all.flat(type='checkbox')
+                                                td 10002
+                                                td 1
+                                                td Danica Doe
+                                                td House Maid
+                                                td Waiting For Approval
+                                                td 
+                                                td 
+                                                    button.btn.btn-danger(type='button') Remove
+                                            tr
+                                                td
+                                                    input#check-all.flat(type='checkbox')
+                                                td 10003
+                                                td 1
+                                                td Samantha Doe
+                                                td House Maid
+                                                td Approved
+                                                td 
+                                                td 
+                                                    button.btn.btn-danger(type='button') Remove
+                                            tr
+                                                td
+                                                    input#check-all.flat(type='checkbox')
+                                                td 10004
+                                                td 1
+                                                td Mika Doe
+                                                td House Maid
+                                                td Approved
+                                                td Approved
+                                                td 
+                                                    button.btn.btn-danger(type='button' disabled) Remove
+                        

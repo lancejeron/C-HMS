@@ -37,6 +37,7 @@
     "npm": "^5.4.2",
     "pug": "^2.0.0-rc.2",
     "serve-static": "^1.12.3",
+    "sweetalert": "^2.1.0",
     "winston": "^2.3.1",
     "xoauth2": "^1.2.0"
   }

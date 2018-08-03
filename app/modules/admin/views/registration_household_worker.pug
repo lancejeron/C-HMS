@@ -1,0 +1,520 @@
+extends ../../../templates/navbaradmin.pug
+
+block content
+    .right_col(role='main')
+        .page-title
+            .title_left
+                h5
+                    | Registration / Household Worker / 
+                    b Form
+        .row
+            .col-md-12.col-sm-12.col-xs-12
+                .x_panel
+                    .x_title
+                        h3 Personal Info
+                        .clearfix
+                    .x_content
+                        br
+                        #wizard.form_wizard.wizard_horizontal
+                            ul.wizard_steps
+                                li
+                                    a(href='#step-1')
+                                        span.step_no 1
+                                        span.step_descr
+                                            | Step 1
+                                            br
+                                            small Personal Information
+                                li
+                                    a(href='#step-2')
+                                        span.step_no 2
+                                        span.step_descr
+                                            | Step 2
+                                            br
+                                            small Educational Background
+                                li
+                                    a(href='#step-3')
+                                        span.step_no 3
+                                        span.step_descr
+                                            | Step 3
+                                            br
+                                            small Working Background
+                                li
+                                    a(href='#step-4')
+                                        span.step_no 4
+                                        span.step_descr
+                                            | Step 4
+                                            br
+                                            small Character References
+                            #step-1
+                                br
+                                div(align='center')
+                                    .x_panel(style='width:85%; background-color:#f1f1f1')
+                                        br
+                                        br
+                                        form.form-horizontal.form-label-left(novalidate='')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='telephone')
+                                                    | Position Desired 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    select.form-control
+                                                        option
+                                                        option Housemaid
+                                                        option Nanny
+                                                        option Cook
+                                                        option Driver
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='email')
+                                                    | Name 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#email.form-control.col-md-7.col-xs-12(type='email', name='email', placeholder='First Name', required='required')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='name')
+                                                    span.required
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#name.form-control.col-md-7.col-xs-12(data-validate-length-range='6', data-validate-words='2', name='name', placeholder='Middle Name', required='required', type='text')
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#name.form-control.col-md-7.col-xs-12(data-validate-length-range='6', data-validate-words='2', name='name', placeholder='Last Name', required='required', type='text')
+                                            //
+                                                <div class="item form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="email" id="email" name="email" placeholder="e.g. alexis_castro@gmail.com" required="required" class="form-control col-md-7 col-xs-12">
+                                                </div>
+                                                </div>
+                                                <div class="item form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Password <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="email" id="email" name="email" placeholder="Minimum of 5 characters" required="required" class="form-control col-md-7 col-xs-12">
+                                                </div>
+                                                </div>
+                                            .form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12
+                                                    | Gender
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    div(align='left')
+                                                        | M:
+                                                        input#genderM.flat(type='radio', name='gender', value='M', checked='', required='')
+                                                        |  F:
+                                                        input#genderF.flat(type='radio', name='gender', value='F')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='number')
+                                                    | Current Address 
+                                                    span.required *
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#number.form-control.col-md-7.col-xs-12(type='number', name='number', placeholder='House/Bldg. no.', required='required', data-validate-minmax='10,100')
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#number.form-control.col-md-7.col-xs-12(type='number', name='number', placeholder='Street', required='required', data-validate-minmax='10,100')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='number')
+                                                    span.required
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#number.form-control.col-md-7.col-xs-12(type='number', name='number', placeholder='City', required='required', data-validate-minmax='10,100')
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#number.form-control.col-md-7.col-xs-12(type='number', name='number', placeholder='Province', required='required', data-validate-minmax='10,100')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Permanent Address 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Cellphone # 
+                                                    span.required
+                                                .col-md-3.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', placeholder='e.g 09356278841', data-validate-length-range='5,20')
+                                                label.control-label.col-md-1.col-sm-3.col-xs-12(for='occupation')
+                                                    | Tel. # 
+                                                    span.required *
+                                                .col-md-2.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', placeholder='e.g 245-3423', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Date of Birth 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Place of Birth 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Height 
+                                                    span.required *
+                                                .col-md-2.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', placeholder="e.g 5'2 ft.", data-validate-length-range='5,20')
+                                                label.control-label.col-md-2.col-sm-3.col-xs-12(for='occupation')
+                                                    | Weight 
+                                                    span.required *
+                                                .col-md-2.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', placeholder='e.g 110 lbs.', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Civil Status 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Citizenship 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', data-validate-length-range='5,20')
+                                            .item.form-group
+                                                label.control-label.col-md-3.col-sm-3.col-xs-12(for='occupation')
+                                                    | Religion 
+                                                    span.required *
+                                                .col-md-6.col-sm-6.col-xs-12
+                                                    input#occupation.optional.form-control.col-md-7.col-xs-12(type='text', name='occupation', data-validate-length-range='5,20')
+                                            br
+                            #step-2
+                                br
+                                .x_panel(style='background-color:#f1f1f1')
+                                    div(align='center')
+                                        form.form-horizontal.form-label-left(novalidate='')
+                                            br
+                                            table
+                                                thead
+                                                    tr
+                                                        td
+                                                        td &nbsp&nbsp
+                                                        td(align='center') NAME
+                                                        td(align='center') ADDRESS
+                                                        td(align='center') DATE GRADUATED
+                                                    tr
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                tbody
+                                                    tr
+                                                        td Primary Education
+                                                        td
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                    tr
+                                                        td Secondary Education
+                                                        td
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                    tr
+                                                        td Tertiary Education
+                                                        td
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                    tr
+                                                        td
+                                                            b Vocational
+                                                        td
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2013', required='required')
+                                            br
+                                            .item.form-group
+                                                label.control-label.col-md-2.col-sm-3.col-xs-12(for='email')
+                                                    | Skills: 
+                                                    span.required
+                                                .col-md-9.col-sm-6.col-xs-12
+                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  Singing, Dancing, Drawing', required='required')
+                                            br
+                            #step-3
+                                br
+                                .x_panel(style='background-color:#f1f1f1')
+                                    div(align='center')
+                                        form.form-horizontal.form-label-left(novalidate='')
+                                            br
+                                            table
+                                                thead
+                                                    tr
+                                                        td(align='center') FROM - TO
+                                                        td(align='center') POSITION
+                                                        td(align='center') COMPANY
+                                                        td(align='center') ADDRESS
+                                                    tr
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                tbody
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='e.g  2011 - 2015', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                            br
+                            #step-4
+                                br
+                                br
+                                .x_panel(style='background-color:#f1f1f1')
+                                    div(align='center')
+                                        h2
+                                            u
+                                                b Relatives
+                                        br
+                                        form.form-horizontal.form-label-left(novalidate='')
+                                            br
+                                            table
+                                                thead
+                                                    tr
+                                                        td(align='center') NAME
+                                                        td(align='center') OCCUPATION
+                                                        td(align='center') CONTACT NUMBER
+                                                        td(align='center') ADDRESS
+                                                    tr
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                tbody
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                br
+                                br
+                                .x_panel(style='background-color:#f1f1f1')
+                                    div(align='center')
+                                        h2
+                                            u
+                                                b Non-Relatives
+                                        br
+                                        form.form-horizontal.form-label-left(novalidate='')
+                                            br
+                                            table
+                                                thead
+                                                    tr
+                                                        td(align='center') NAME
+                                                        td(align='center') OCCUPATION
+                                                        td(align='center') CONTACT NUMBER
+                                                        td(align='center') ADDRESS
+                                                    tr
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                        td
+                                                            br
+                                                tbody
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                    tr
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                                                        td
+                                                            .item.form-group
+                                                                .col-md-12.col-sm-6.col-xs-12
+                                                                    input#email.form-control.col-md-7.col-xs-12(type='text', name='email', placeholder='', required='required')
+                        // End SmartWizard Content

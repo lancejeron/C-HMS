@@ -1,12 +1,151 @@
 extends ../../../templates/navbarhw.pug
-//- doctype html
-//- html(lang='en')
-//-   head
-//-     meta(charset='UTF-8')
-//-     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-//-     meta(http-equiv='X-UA-Compatible', content='ie=edge')
-//-     title Document
-//-   body
-//-     | hi HW
-//-   each user in usertab
-//-     h3 Welcome to PUP Student Market, #{user.strFName}
+
+block content
+  .right_col(role='main')
+    div
+        .page-title
+          .title_left
+            each user in usertab
+                h1
+                    b Welcome, #{user.strFName}.          
+          
+          .clearfix        
+          .row
+            .col-md-12.col-sm-12.col-xs-12
+              .x_panel
+                .x_title
+                  h2 Home  
+                  .clearfix
+                .x_content
+                  br
+                  .col-md-12.col-sm-12.col-xs-12
+                    .x_panel
+                      div(role='tabpanel', data-example-id='togglable-tabs')
+                                ul#myTab.nav.nav-tabs.bar_tabs(role='tablist')
+                                    li.active(role='presentation')
+                                        a#home-tab(href='#tab_content1', role='tab', data-toggle='tab', aria-expanded='true') My Request
+                                    li(role='presentation')
+                                        a#profile-tab(href='#tab_content2', role='tab', data-toggle='tab', aria-expanded='false') Incoming Request
+                                    li(role='presentation')
+                                        a#profile-tab(href='#tab_content3', role='tab', data-toggle='tab', aria-expanded='false') History
+                                    li(role='presentation')
+                                        a#offers-tab(href='#tab_content4', role='tab', data-toggle='tab', aria-expanded='false') Job Offers	
+                                #myTabContent.tab-content
+                                    #tab_content1.tab-pane.fade.active.in(role='tabpanel', aria-labelledby='home-tab')
+                                        // My Request
+                                        //- .row
+                                        //-     .col-md-12
+                                        //-         br
+                                        //-         .x_content
+                                        //-             .row
+                                        //-                 .col-md-12.col-sm-4.col-xs-12.profile_details
+                                        //-                     .well.profile_view(style='width:100%')
+                                        //-                         .col-xs-12
+                                        //-                             center
+                                        //-                                 h2
+                                        //-                                     br
+                                        //-                                     | Type of Request:
+                                        //-                                     b &nbsp&nbspAdd Household Worker
+                                        //-                                     br
+                                        //-                             .col-xs-12.text-center
+                                        //-                                 p
+                                        //-                                 h2 You have successfully sent this request. This request is awaiting for approval.
+                                        //-                                 p
+                                        //-                                 br
+                                        //-                         .col-xs-12.bottom.text-center
+                                        //-                             a(href='createlist')
+                                        //-                                 button.btn.btn-primary(type='button')
+                                        //-                                     | View
+                                    // END My Request
+                                    #tab_content2.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab')
+                                        // Incoming Request
+                                        //- .row
+                                        //-     .col-md-12
+                                        //-         br
+                                        //-         .x_content
+                                        //-             .row
+                                        //-                 .col-md-12.col-sm-4.col-xs-12.profile_details
+                                        //-                     .well.profile_view(style='width:100%')
+                                        //-                         .col-xs-12
+                                        //-                             center
+                                        //-                                 h2
+                                        //-                                     br
+                                        //-                                     | Type of Request:
+                                        //-                                     b &nbsp&nbspLeave
+                                        //-                                     br
+                                        //-                             .col-xs-12.text-center
+                                        //-                                 p
+                                        //-                                 h2
+                                        //-                                     | Your household worker sent you request. This request is awaiting for your approval.
+                                        //-                                 p
+                                        //-                                 br
+                                        //-                         .col-xs-12.bottom.text-center
+                                        //-                             a(href='/home_client/request_leave')
+                                        //-                                 button.btn.btn-primary(type='button') View
+                                    // END Incoming Request
+                                    #tab_content3.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab')
+                                        // History
+                                        //- .row
+                                        //-     .col-md-12
+                                        //-         br
+                                        //-         .x_content
+                                        //-             .row
+                                        //-                 .col-md-12.col-sm-4.col-xs-12.profile_details
+                                        //-                     .well.profile_view(style='width:100%')
+                                        //-                         .col-xs-12
+                                        //-                             center
+                                        //-                                 h2
+                                        //-                                     br
+                                        //-                                     | This is your previous transaction.
+                                        //-                             .col-xs-12.text-center
+                                        //-                                 p
+                                        //-                                 h2
+                                        //-                                     h2
+                                        //-                                         p
+                                        //-                                         br
+                                        //-                         .col-xs-12.bottom.text-center
+                                        //-                             button.btn.btn-primary(type='button')
+                                    #tab_content4.tab-pane.fade(role='tabpanel', aria-labelledby='offers-tab')
+                                        each offer in offertab
+                                            .row
+                                                .col-md-12
+                                                    br
+                                                    .x_content
+                                                        .row
+                                                            .col-md-12.col-sm-4.col-xs-12.profile_details
+                                                                .well.profile_view(style='width:100%')
+                                                                    .col-xs-12
+                                                                        center
+                                                                            h2
+                                                                                br
+                                                                                | Type of Request:
+                                                                                b &nbsp&nbspAdd Household Worker
+                                                                                br
+                                                                        .col-xs-12.text-center
+                                                                            p
+                                                                            h2 You are qualified from a job offer from #{offer.strFName} #{offer.strLName}
+                                                                            p
+                                                                            br
+                                                                    .col-xs-12.bottom.text-center
+                                                                        button.btn.btn-primary(type='button', data-toggle='modal', data-target='#viewjob', data-id=offer.intRRequestID, data-id2=offer.intRRequest_No)
+                                                                            | View Details
+    #viewjob.modal.fade.bs-add-modal-xs(tabindex='-1', role='dialog', aria-hidden='true')
+        .modal-dialog.modal-xs
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                    h4#myModalLabel.modal-title Job Details
+                .modal-body
+                    form#demo-form2.form-horizontal.form-label-left(method="POST" action="/home_householdworker/job_offer")
+                        .form-group
+                            input.form-control.col-md-7.col-xs-12(type='text', id='_id', required='required', name='transID' style="display:none;")
+                            input.form-control.col-md-7.col-xs-12(type='text', id='_id2', required='required', name='reqno' style="display:none;") 
+                        .ln_solid
+                        .form-group.pull-right
+                            button.btn.btn-success(type='submit' name='btn1' value='accept')
+                                i.fa.fa-thumbs-up
+                                |   Accept
+                            button#reject.btn.btn-danger(type='submit' name='btn1' value='reject')
+                                i.fa.fa-trash
+                                |   Reject                                     
