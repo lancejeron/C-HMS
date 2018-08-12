@@ -2,11 +2,27 @@ var express = require('express');
 var flog = require( '../login/loggedin');
 var router = express.Router();
 
-
-
+router.get('/', flog, findjoboffers, noofincomingrequests,  render);
+function render(req,res){
+    if(req.valid==2)
+      res.render('home2/views/index',{usertab: req.user, offertab: req.offer, irtab: req.ir});
+    else if(req.valid==0)
+      res.render('admin/views/invalidpages/normalonly');
+    else
+      res.render('login/views/invalid');
+  }
+function noofincomingrequests(req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT COUNT(*) AS NoIR from tblresults WHERE intRHWID = ${req.session.user}`, function(err,results){
+    if (err) return res.send(err);
+    console.log(''+req.session.user);
+    req.ir = results;
+    return next();
+  })
+}
 function findjoboffers(req, res, next){
   var db = require('../../lib/database')();
-  db.query(`SELECT intRRequestID, intRRequest_No, strRequestDesc, c.*, d.* FROM tblresults AS a INNER JOIN tblfinalRequest AS b ON a.intRRequestID = b.intRequestID INNER JOIN tblclient AS c ON b.intRequest_ClientID = c.intClientID INNER JOIN tbluser AS d ON d.intID= c.intClientID WHERE strRHWStatus = 'Waiting' AND intRHWID =?`,[req.session.user], function (err, results) {
+  db.query(`SELECT intRRequestID, intRRequest_No, strRequestDesc, strRHWStatus, c.*, d.* FROM tblresults AS a INNER JOIN tblfinalRequest AS b ON a.intRRequestID = b.intRequestID INNER JOIN tblclient AS c ON b.intRequest_ClientID = c.intClientID INNER JOIN tbluser AS d ON d.intID= c.intClientID WHERE intRHWID = ? AND (strRHWStatus IN ('Waiting','Approved'))`,[req.session.user], function (err, results) {
     if (err) return res.send(err);
     if (!results[0])
     console.log(''+req.params.userid);
@@ -14,15 +30,6 @@ function findjoboffers(req, res, next){
     return next();
   });
 }
-function render(req,res){
-    if(req.valid==2)
-      res.render('home2/views/index',{usertab: req.user, offertab: req.offer});
-    else if(req.valid==0)
-      res.render('admin/views/invalidpages/normalonly');
-    else
-      res.render('login/views/invalid');
-  }
-router.get('/', flog, findjoboffers, render);
 
 // -----------------------------------------------------------------JOB OFFER DECISION
 function offerdecision(req,res){

@@ -11,27 +11,22 @@ block content
                                 each list in listtab
                                     h1 My List: "#{list.strRequestName}"
                                     .clearfix
-                            .x_panel(style='background-color:#f2f2f2')
-                                | &nbsp&nbsp&nbsp&nbsp&nbsp
-                                b Disclaimer!
-                                ul
-                                    li
-                                        | Select services that already 
-                                        b approved
-                                        |  your request before proceeding to the next process.
                             br
                             each list in listtab
-                                button.btn.btn-success.btn-lg(type='button' data-toggle="modal" data-target="#Add")
-                                    i.fa.fa-plus
-                                    | &nbspAdd Service
+                                if (list.strRequestStatus == 'Draft' || list.strRequestStatus == 'On process')
+                                    button.btn.btn-success.btn-lg(type='button' data-toggle="modal" data-target="#Add")
+                                        i.fa.fa-plus
+                                        | &nbspAdd Service
+                                else if (list.strRequestStatus == 'On deployment' || list.strRequestStatus == 'Pending')
+
                                 br
                                 each count in counttab
                                     if (list.strRequestStatus == 'Draft' && count.count != 0)
                                         a(href='/request_add/submit_request_'+list.intRequestID)
                                             button.btn.pull-right.btn-success.btn-lg(type='button')
-                                                i.fa.fa-check
-                                                |   Submit Request
-                                    else if list.strRequestStatus == 'On process'     
+                                                i.fa.fa-envelope
+                                                |   Submit List
+                                    else if list.strRequestStatus == 'On process' || list.strRequestStatus == 'Pending'
                             br
                             h2 Services:
                             table.table.jambo_table.bulk_action
@@ -56,11 +51,14 @@ block content
                                                 button.btn.btn-info.btn-xs(type='button' data-toggle="modal" data-target="#view_item"
                                                                         , data-requestno=item.intIRequest_No, data-servicename=item.strName, data-quantity=item.intIQuantity, data-gender=item.strIRequestGender, data-educ=item.strIRequestEduc, data-exp=item.intIRequestExp
                                                                         ) View
-                                                    if list.strRequestStatus == 'Not Sent'
+                                                    if list.strRequestStatus == 'Draft'
                                                         button.btn.btn-warning.btn-xs(type='button' data-toggle="modal" data-target="#edit_item") Edit
-                                                    else if list.strRequestStatus == 'On-going'
-                                                button.btn.btn-danger.btn-xs(type='button' data-toggle="modal" data-target="#remove_item") Delete
-                        h3 Results:
+                                                        button.btn.btn-danger.btn-xs(type='button' data-toggle="modal" data-target="#remove_item") Delete
+                                                    else if list.strRequestStatus == 'On process'
+                                                        a(href='result_'+item.intIRequestID+item.intIRequest_No)
+                                                            button.btn.btn-primary.btn-xs(type='button') View Result
+                                                        button.btn.btn-danger.btn-xs(type='button' data-toggle="modal" data-target="#remove_item") Delete
+                        h3 Approved:
                         .clearfix
                             each hw in hwtab
                                 .col-md-4.col-sm-4.col-xs-12.profile_details
@@ -88,53 +86,21 @@ block content
                                                             b 
                                                 .right.col-xs-5.text-center
                                                     img.img-circle.img-responsive(src='../images/'+hw.strPicture, alt='', style='width:100px; height:100px')
-                                            if hw.strRClientStatus == 'Waiting'
-                                                .col-xs-12.bottom.text-center
-                                                    //- .col-xs-12.col-sm-4.emphasis
-                                                    //-     .x_panel
-                                                    //-         input#check-all.flat(type='checkbox')
-                                                    .col-xs-12.col-sm-12.emphasis
-                                                        a(href='hw_profile_'+hw.intRRequestID+hw.intRHWID)
-                                                            button.btn.btn-primary(type='button')
-                                                                i.fa.fa-user  
-                                                                |  View Profile
-                                                        button.btn.btn-success(type='submit' name='btn1' value='approve')
-                                                            i.fa.fa-check  
-                                                            |  Approve
-                                                        button.btn.btn-danger(type='submit' name='btn1' value='reject')
-                                                            i.fa.fa-times  
-                                                            |  Reject
-                                            else if hw.strRClientStatus == 'Approved'
-                                                .col-xs-12.col-sm-4.emphasis
-                                                    .x_panel
-                                                        input#check-all.flat(type='checkbox')
                                                 .col-xs-12.col-sm-8.emphasis
                                                     a(href='hw_profile_'+hw.intRRequestID+hw.intRHWID)
                                                         button.btn.btn-primary(type='button')
                                                             i.fa.fa-user  
                                                             |  View Profile
-                                            else if hw.strRClientStatus == 'Rejected'
-                                                .col-xs-12.bottom.text-center
-                                                    //- .col-xs-12.col-sm-4.emphasis
-                                                    //-     .x_panel
-                                                    //-         input#check-all.flat(type='checkbox')
-                                                    .col-xs-12.col-sm-12.emphasis
-                                                        a(href='hw_profile_'+hw.intRRequestID+hw.intRHWID)
-                                                            button.btn.btn-primary(type='button')
-                                                                i.fa.fa-user  
-                                                                |  View Profile
-                                                        button.btn.btn-warning(type='submit' name='btn1' value='revert')
-                                                            i.fa.fa-refresh  
-                                                            |  Revert
-                                                
-                                        
                         .form-group.pull-right
                             .col-md-12.col-sm-9.col-xs-12.pull-right
                                 br
                                 a(href='/request_add')
                                     button.btn.btn-primary.btn-lg(type='button') Back
-                                a(href='/deployment')
-                                    button.btn.btn-success.btn-lg(type='submit') Proceed to Deployment Process
+                                each noofapprove in noofapprovetab
+                                    each list in listtab
+                                        if noofapprove.NOOFapprove > 0 && (list.strRequestStatus!='Pending' && list.strRequestStatus!='Finished')
+                                            button.btn.btn-success.btn-lg(type='button' data-toggle="modal" data-target="#deployment") Proceed to Deployment
+                                        else
     // Small modal
     #myListCancel1.modal.fade.bs-example-modal-sm(tabindex='-1', role='dialog', aria-hidden='true')
         .modal-dialog.modal-sm
@@ -215,7 +181,22 @@ block content
                                             | Work Experience (at least):
                                             span.required
                                         .col-md-2.col-sm-6.col-xs-12
-                                            input#first-name.form-control.col-md-7.col-xs-12(type='number' name='workexp' value='0')     
+                                            input#first-name.form-control.col-md-7.col-xs-12(type='number' name='workexp' value='0')    
+                                    .form-group
+                                        label.control-label.col-md-5.col-sm-3.col-xs-12
+                                            | Work Type:
+                                            span.required
+                                        .col-md-5.col-sm-6.col-xs-12
+                                            input#optionsRadios1(type='radio', checked='', value='stayin', name='worktype')
+                                            |  Stay in &nbsp
+                                            input#optionsRadios1(type='radio', checked='', value='stayout', name='worktype')
+                                            |  Stay out
+
+
+                                            //- label
+                                            //-     input#optionsRadios1(type='radio', checked='', value='option1', name='optionsRadios')
+                                            //-     |  Option one. only select one option
+                                        
                                     .x_panel
                                         br
                                         h5 Other Attributes : 
@@ -262,33 +243,72 @@ block content
                             li 
                                 b Work Experience:
                                 i#f
+    
+    // Deployment Modal
+    #deployment.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-hidden='true')
+        .modal-dialog.modal-lg
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                    h4
+                        b Deployment Details
+                .modal-body
+                    form.form-horizontal.form-label-center(method="POST" action='/request_add/contract') 
+                        each list in listtab
+                            input(id = 'idtrans' type='text', required='required', name='transid', value=''+list.intRequestID, style="display:none;")  
+                            input(id='thedate' type='date', name='reqdate' style='display:none;')
+                            input(id='invo' type='text', name='invnum' style='display:none;')
+                            br
+                            .form-group
+                                label.control-label.col-md-5 Type of Deployment
+                                .col-md-3
+                                    select.form-control(name='dep')
+                                        each fee in feetab
+                                            option(value=''+fee.intID) #{fee.strName} &nbsp&nbsp  + P #{fee.fltFee}
+                            .form-group
+                                label.control-label.col-md-5
+                                    | Preferred Date For Deployment
+                                    span.required *
+                                .col-md-3
+                                    input.form-control.has-feedback-left(type='date', name='datedep')
+                                    span.fa.fa-calendar-o.form-control-feedback.left(aria-hidden='true')
+                                    span#inputSuccess2Status4.sr-only (success)
+                            .form-group
+                                label.control-label.col-md-5
+                                    | Preferred Time For Deployment
+                                    span.required *
+                                .col-md-3
+                                    .input-group.date
+                                        input.form-control(type='time' name='timedep')
+                                        span.input-group-addon
+                                            span.glyphicon.glyphicon-time 
+                            .form-group.pull-right
+                                button.btn.btn-success.btn-lg(type='submit',  onCLick='time();') Next
+    script.
+        function time(){
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            var hh = today.getHours();
+            var min = today.getMinutes();
+            var sec = today.getSeconds();
+            var x= document.getElementById("thedate");
+            var y=document.getElementById("idtrans").value
+            var inv;
+            
+            if(dd<10) {
+                dd = '0'+dd
+            } 
 
+            if(mm<10) {
+                mm = '0'+mm
+            } 
 
-                            //- .col-md-4.col-sm-4.col-xs-12.profile_details
-                            //-     .well.profile_view
-                            //-         .col-sm-12
-                            //-             h4.brief
-                            //-                 i Housemaid
-                            //-             .left.col-xs-7
-                            //-                 h5.brief Number: 1
-                            //-                 h2 Nicole Pearson
-                            //-                 //- p
-                            //-                 //-     strong About: 
-                            //-                 //-     |  Web Designer / UX / Graphic Artist / Coffee Lover
-                            //-                 ul.list-unstyled
-                            //-                     li
-                            //-                         i.fa.fa-building
-                            //-                         |  Address:
-                            //-                     li
-                            //-                         i.fa.fa-phone
-                            //-                         |  Phone #:
-                            //-             .right.col-xs-5.text-center
-                            //-                 img.img-circle.img-responsive(src='images/img.jpg', alt='')
-                            //-         .col-xs-12.bottom
-                            //-             .col-xs-12
-                            //-                 center
-                            //-                     button.btn.btn-primary.btn-xs(type='button')
-                            //-                         i.fa.fa-user  
-                            //-                         |  View Profile
-                            //-                     br
-                            //-                     input.flat(type='checkbox')
+            today = yyyy + '-' + mm + '-' + dd ;
+            //- document.write(today);
+           document.getElementById("thedate").value=today;
+           inv = yyyy+y;
+           document.getElementById("invo").value=inv;
+        }

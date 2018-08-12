@@ -20,21 +20,22 @@ block content
                             table#datatable.table.table-striped.table-bordered
                                 thead
                                     tr
-                                        th ID NO.
+                                        th ID
                                         th NAME
-                                        th REQUEST
-                                        th DATE REQUESTED
+                                        th DATE SETTLED
+                                        th TRANSACTION WILL END
                                         th STATUS
                                         th ACTION
                                 tbody
-                                    tr
-                                        td 10001
-                                        td Alexis Castro
-                                        td Add
-                                        td July 2 2018
-                                        td Finished
-                                        td
-                                            a(href='transaction_client_request_')
-                                                button.btn.btn-info(type='button')
-                                                    i.fa.fa-eye
-                                                    |   View
+                                    each list in listtab
+                                        tr
+                                            td #{list.intTRequestID}
+                                            td #{list.strName}
+                                            td #{list.datDateSettled}
+                                            td #{list.dateexpire}
+                                            td #{list.strTStatus}
+                                            td 
+                                                a(href='transaction_client_request_')
+                                                    button.btn.btn-info(type='button')
+                                                        i.fa.fa-eye
+                                                        |   View

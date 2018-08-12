@@ -23,7 +23,7 @@ html(lang='en')
     // Switchery
     link(href='../admin/gentelella/vendors/switchery/dist/switchery.min.css', rel='stylesheet')
 
-  body.nav-md.footer_fixed
+  body.nav-md.footer_fixed(style='background-color:#f7f7f7' onpageshow='total();')
     each user in usertab
       .container.body
         .main_container
@@ -146,9 +146,11 @@ html(lang='en')
       // bootstrap-datetimepicker
       script(src='../admin/gentelella/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')
       script.
-        $('#single_cal4').datetimepicker({
-        format:  'MM/DD/YYYY'
-        });
+        $('#datatable2').DataTable();
+        $('#datatable3').DataTable();
+        //- $('#single_cal4').datetimepicker({
+        //- format:  'YYYY-MM-DD'
+        //- });
         $('#myDatepicker3').datetimepicker({
           format: 'hh:mm A'
         });

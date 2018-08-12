@@ -11,13 +11,6 @@ block content
                 .col-md-12.col-sm-12.col-xs-12
                     .x_panel
                         br
-                        .x_panel(style='background-color:#f2f2f2')
-                            | &nbsp&nbsp&nbsp&nbsp&nbsp
-                            b Disclaimer!
-                            ul
-                                li
-                                    | Click 
-                        br
                         br
                         table#datatable.table.table-striped.table-bordered
                             thead
@@ -26,6 +19,7 @@ block content
                                     th NAME
                                     th REQUEST
                                     th DATE REQUESTED
+                                    th DATE NEEDED
                                     th STATUS
                                     th ACTION
                             tbody
@@ -35,9 +29,20 @@ block content
                                         td #{request.strName}
                                         td #{request.strRequestType}
                                         td #{request.datRequestDate}
+                                        td #{request.datRequestNeedDate}
                                         td #{request.strRequestStatus}
                                         td
-                                            a(href='transaction_client_request_'+request.intRequestID)
-                                                button.btn.btn-info(type='button')
-                                                    i.fa.fa-eye
-                                                    | &nbspview
+                                            form(method='POST' action='transactionrequestdecision')
+                                                input(type='number' required='required', name='transid' value=''+request.intRequestID, style='display:none;')                          
+                                                a(href='transaction_client_request_'+request.intRequestID)
+                                                    button.btn.btn-info(type='button')
+                                                        i.fa.fa-eye
+                                                        | &nbspView
+                                                if request.strRequestStatus == 'Pending'                       
+                                                    button.btn.btn-success(type='submit' name='btn1' value='approve')
+                                                        i.fa.fa-check
+                                                        | &nbspApprove
+                                                    button.btn.btn-danger(type='submit' name='btn1' value='reject')
+                                                        i.fa.fa-times
+                                                        | &nbspReject
+                                                    

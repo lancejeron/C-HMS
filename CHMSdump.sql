@@ -70,6 +70,19 @@ CREATE TABLE IF NOT EXISTS `CHMS`.`tblhouseholdworker` (
   `intServiceID` int,
   `datBirthDay` DATE,
   `strGender` varchar(10),
+--   `strCivilStatus` varchar(20),
+--   `strCitizenship` varchar(30),
+--   `strReligion` varchar(20),
+--   `strHeight` varchar(10),
+--   `strWeight` varchar(10),
+--   `strCellNum` varchar(11),
+--   `strTelNum` varchar(11),
+--   `strCAHouseNo` VARCHAR(45) NULL,
+--   `strCAStreet` VARCHAR(45) NULL,
+--   `strCAMunicipality` VARCHAR(45) NULL,
+--   `strCity` VARCHAR(45) NULL,
+--   `strPAddress` VARCHAR(70) NULL,
+--   `strPofBirth` VARCHAR(70) NULL,
   KEY `intHWID_idx`(`intHWID`),
   KEY `intServiceID_idx`(`intServiceID`),
   PRIMARY KEY (intHWID),
@@ -174,12 +187,13 @@ DROP TABLE IF EXISTS `tblMservice`;
 CREATE TABLE IF NOT EXISTS `CHMS`.`tblMservice` (
 	`intID` INT NOT NULL auto_increment,
     `strName` VARCHAR(100) NULL,
+    `deciRate` DECIMAL(9,2),
     `strStatus` VARCHAR(45) NULL,
     PRIMARY KEY (`intID`))
 ENGINE = InnoDB;
 
 INSERT INTO `tblMservice` VALUES
-('1','Housemaid','Active'),('2','Cook','Active'), ('3','Driver','Active'), ('4','Nanny','Active'), ('5','Gardener','Inactive');
+('1','Housemaid', '3000.00', 'Active'),('2','Cook', '3000.00', 'Active'), ('3','Driver', '3000.00','Active'), ('4','Nanny', '3000.00','Active');
 
 DROP TABLE IF EXISTS `tblMskills`;
 CREATE TABLE IF NOT EXISTS `CHMS`.`tblMskills` (
@@ -205,6 +219,29 @@ ENGINE = InnoDB;
 INSERT INTO `tblmcity` VALUES
 ('1','Caloocan','Active'),('2','Makati','Inactive');
 
+DROP TABLE IF EXISTS `tblfee`;
+CREATE TABLE IF NOT EXISTS `CHMS`.`tblfee` (
+	`intID` INT NOT NULL auto_increment,
+    `strName` VARCHAR(30) NULL,
+    `fltFee` DECIMAL(9,2) NULL,
+    `strStatus` VARCHAR(45) NULL,
+    PRIMARY KEY (`intID`)
+)
+ENGINE = InnoDB;
+INSERT INTO `tblfee` VALUES
+('1','Agency Fee', '8000.00', 'Active'),('2','Drop-off', '600.00', 'Active'), ('3','Pick-up', '0.00', 'Active'), ('4','Replacement Fee', '1000.00', 'Active');
+
+DROP TABLE IF EXISTS `tblagency`;
+CREATE TABLE IF NOT EXISTS `CHMS`.`tblagency` (
+    `strName` VARCHAR(100) NULL,
+    `strAddress` VARCHAR(200) NULL,
+    `strTelNum` VARCHAR(11) NULL,
+    `strEmail` VARCHAR(45) NULL
+)
+ENGINE = InnoDB;
+INSERT INTO `tblagency` VALUES 
+('Mega Pacific Employment Services','Shaw Blvd, Mandaluyong 1552 Metro Manila', '(02)5310618', 'mega@xyz.com');
+
 -- Request ADD
 DROP TABLE IF EXISTS `tblfinalrequest`;
 CREATE TABLE IF NOT EXISTS `CHMS`.`tblfinalrequest` (
@@ -215,6 +252,7 @@ CREATE TABLE IF NOT EXISTS `CHMS`.`tblfinalrequest` (
     `strRequestDesc` VARCHAR(250) NULL,
     `datRequestDate` date,
     `strRequestStatus` varchar(15),
+    `datRequestNeedDate` date,
     PRIMARY KEY(`intRequestID`),
     KEY `intRequest_ClientID_idx`(`intRequest_ClientID`),
     CONSTRAINT `intRequest_ClientID` FOREIGN KEY (`intRequest_ClientID`) REFERENCES `tbluser` (`intID`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -251,9 +289,26 @@ CREATE TABLE IF NOT EXISTS `CHMS`.`tblresults` (
     CONSTRAINT `intRHWID` FOREIGN KEY (`intRHWID`) REFERENCES `tbluser` (`intID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 
 )
-
 ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS `tbltransaction`;
+CREATE TABLE IF NOT EXISTS `CHMS`.`tbltransaction` (
+	`intTRequestID` INT NOT NULL,
+    `intTClientID` INT,
+    `datDateRequested` DATE,
+    `intTypeofDeployment` INT,
+    `datDateofDeployment` DATE,
+    `timTimeofDeployment` TIME,
+    `strContract` VARCHAR(10000),
+    `strContractStatus` VARCHAR(20),
+    `datDateSettled` DATE,
+    `strTStatus` VARCHAR(20),
+    `strORNumber` VARCHAR(20),
+    `strInvoiceNum` VARCHAR(20),
+    KEY (`intTRequestID`),
+    CONSTRAINT `intTRequestID` FOREIGN KEY (`intTRequestID`) REFERENCES `tblfinalrequest` (`intRequestID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+)
+ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -54,121 +54,186 @@ block content
                                                     td #{request.intIRequest_No}
                                                     td #{request.strName}
                                                     td #{request.intIQuantity}
-                                                    td 3
-                                                    td 1
+                                                    td 
+                                                    td 
                                                     td
                                                         button.btn.btn-info(type='button', data-toggle="modal" data-target="#view_item"
                                                                         , data-requestno=request.intIRequest_No, data-servicename=request.strName, data-quantity=request.intIQuantity, data-gender=request.strIRequestGender, data-educ=request.strIRequestEduc, data-exp=request.intIRequestExp)
                                                             i.fa.fa-eye
                                                             |   View
                                                         each list in listtab
-                                                            a(href='transaction_result_'+list.intRequestID+request.intIRequest_No)
+                                                            if list.strRequestStatus == 'On process'
+                                                                a(href='transaction_result_'+list.intRequestID+request.intIRequest_No)
+                                                                    button.btn.btn-primary(type='button')
+                                                                        i.fa.fa-list
+                                                                        |   View List
+                                                            else   
+                                    each list in listtab
+                                        if list.strRequestStatus == 'Pending'
+                                            div(align='center')
+                                                .x_panel(style='background:#f1f1f1')
+                                                    h2
+                                                        b Deployment Details
+                                            table.table.table-striped.table-bordered
+                                                thead
+                                                    tr
+                                                        th Date of Deployment
+                                                        th Time of Deployment
+                                                        th Type of Deployment
+                                                        th Contract
+                                        else
+                                            div(align='center')
+                                                .x_panel(style='background:#f1f1f1')
+                                                    h2
+                                                        b Contract
+                                            table.table.table-striped.table-bordered
+                                                thead
+                                                    tr
+                                                        th 
+                                                            center
                                                                 button.btn.btn-primary(type='button')
                                                                     i.fa.fa-list
-                                                                    |   View List
+                                                                    |   Contract
+                                                        th 
+                                                            center
+                                                                p 
+                                                        
                     .x_panel
-                        //- center
-                        //-         button.btn.btn-primary.btn-lg(type='button') Send to Household Worker Approval
-                        //-         button.btn.btn-success.btn-lg(type='button') Send to Client Approval
                         br
-                        center
-                            h5 For Household Worker's Approval
-                        .row
-                            each selected in selectedtab
-                                if selected.strRClientStatus ==''                         
-                                    .col-md-4.col-sm-4.col-xs-12.profile_details
-                                        .well.profile_view
-                                            .col-sm-12
-                                                h4.brief
-                                                    i Housemaid : #{selected.intRHWID}
-                                                .left.col-xs-7
-                                                    h2 Name: 
-                                                    p
-                                                        | Age:
-                                                        strong  
-                                                    ul.list-unstyled
-                                                        li
-                                                            | Gender: 
-                                                            b 
-                                                        li
-                                                            | Status: #{selected.strRHWStatus}
-                                                            b 
-                                                .right.col-xs-5.text-center
-                                                    img.img-circle.img-responsive(src='/assets/gentelella/production/images/alexis.jpg', alt='', style='width:100px; height:100px')
-                                            .col-xs-12.bottom.text-center
-                                                //- .col-xs-12.col-sm-4.emphasis
-                                                    .x_panel
-                                                        input#check-all.flat(type='checkbox')
-                                                
-                                                .col-xs-12.col-sm-8.emphasis
-                                                    a(href='/admin/hw_profile_'+selected.intRRequestID+selected.intRHWID)
-                                                        button.btn.btn-primary(type='button')
-                                                            i.fa.fa-user  
-                                                            |  View Profile
-                                                form(method="POST" action="tr_add_actions_"+selected.intRRequestID)
-                                                    .col-xs-12.col-sm-8.emphasis
-                                                        input(type='text' name='hwid' value=''+selected.intRHWID , style="display:none;" )
-                                                        input(type='text' name='reqno' value=''+selected.intRRequest_No , style="display:none;" )
-                                                        if selected.strRHWStatus == '' && selected.strRClientStatus ==''
-                                                            button.btn.btn-success(type='submit' name='btn1' value='sendtohw')
-                                                                i.fa.fa-paper-plane 
-                                                                |  Send Request
-                                                        else if selected.strRHWStatus == 'Waiting' && selected.strRClientStatus ==''
-                                                            button.btn.btn-warning(type='submit' name='btn1' value='cancelsendtohw')
-                                                                i.fa.fa-times  
-                                                                |  Cancel Request
-                                                        else if selected.strRHWStatus == 'Approved' && selected.strRClientStatus ==''
-                                                            button.btn.btn-success(type='submit' name='btn1' value='sendtoclient')
-                                                                i.fa.fa-envelope 
-                                                                |  Send to Client
-                                                        else if selected.strRHWStatus == 'Rejected' && selected.strRClientStatus ==''
-                                                            button.btn.btn-danger(type='submit' name='btn1' value='removefromlist')
-                                                                i.fa.fa-eye-lash 
-                                                                |  Remove
-                
-                        center
-                            h5 For Client's Approval
-                        .row
-                            each selected in selectedtab
-                                if selected.strRClientStatus !=''
-                                    .col-md-4.col-sm-4.col-xs-12.profile_details
-                                        .well.profile_view
-                                            .col-sm-12
-                                                h4.brief
-                                                    i Housemaid: #{selected.intRHWID}
-                                                .left.col-xs-7
-                                                    h2 Name
-                                                    p
-                                                        | Age:
-                                                        strong   
-                                                    ul.list-unstyled
-                                                        li
-                                                            | Gender: 
-                                                            b 
-                                                        li
-                                                            | Status: #{selected.strRClientStatus}
-                                                            b 
-                                                .right.col-xs-5.text-center
-                                                    img.img-circle.img-responsive(src='/assets/gentelella/production/images/alexis.jpg', alt='', style='width:100px; height:100px')
-                                            .col-xs-12.bottom.text-center
-                                                //- .col-xs-12.col-sm-4.emphasis
-                                                    .x_panel
-                                                        input#check-all.flat(type='checkbox')
-                                                .col-xs-12.col-sm-8.emphasis
-                                                    a(href='/admin/hw_profile_'+selected.intRRequestID+selected.intRHWID)
-                                                        button.btn.btn-primary(type='button')
-                                                            i.fa.fa-user  
-                                                            |  View Profile
-                                                .col-xs-12.col-sm-8.emphasis
-                                                    if selected.strRHWStatus == 'Approved' && ((selected.strRClientStatus =='Waiting') || (selected.strRClientStatus =='Approved'))
-                                                        //- button.btn.btn-primary(type='button')
-                                                        //-     i.fa.fa-user  
-                                                        //-     |  View Profile
-                                                    else if selected.strRHWStatus == 'Approved' && selected.strRClientStatus =='Rejected'
-                                                        button.btn.btn-danger(type='button')
-                                                            i.fa.fa-times 
-                                                            |  Remove
-        
+                        each list in listtab
+                            if list.strRequestStatus == 'On process'
+                                center
+                                    h5 For Household Worker's Approval
+                                .row
+                                    each selected in selectedtab
+                                        if selected.strRClientStatus ==''                         
+                                            .col-md-4.col-sm-4.col-xs-12.profile_details
+                                                .well.profile_view
+                                                    .col-sm-12
+                                                        h4.brief
+                                                            i #{selected.strName}: #{selected.intRHWID}
+                                                        .left.col-xs-7
+                                                            h2 Name: 
+                                                            p
+                                                                | Age:
+                                                                strong  
+                                                            ul.list-unstyled
+                                                                li
+                                                                    | Gender: 
+                                                                    b 
+                                                                li
+                                                                    | Status: #{selected.strRHWStatus}
+                                                                    b 
+                                                        .right.col-xs-5.text-center
+                                                            img.img-circle.img-responsive(src='/assets/gentelella/production/images/alexis.jpg', alt='', style='width:100px; height:100px')
+                                                    .col-xs-12.bottom.text-center
+                                                        //- .col-xs-12.col-sm-4.emphasis
+                                                            .x_panel
+                                                                input#check-all.flat(type='checkbox')
+                                                        
+                                                        .col-xs-12.col-sm-8.emphasis
+                                                            a(href='/admin/hw_profile_'+selected.intRRequestID+selected.intRHWID)
+                                                                button.btn.btn-primary(type='button')
+                                                                    i.fa.fa-user  
+                                                                    |  View Profile
+                                                        form(method="POST" action="tr_add_actions_"+selected.intRRequestID)
+                                                            .col-xs-12.col-sm-8.emphasis
+                                                                input(type='text' name='hwid' value=''+selected.intRHWID , style="display:none;" )
+                                                                input(type='text' name='reqno' value=''+selected.intRRequest_No , style="display:none;" )
+                                                                if selected.strRHWStatus == '' && selected.strRClientStatus ==''
+                                                                    button.btn.btn-success(type='submit' name='btn1' value='sendtohw')
+                                                                        i.fa.fa-paper-plane 
+                                                                        |  Send Request
+                                                                else if selected.strRHWStatus == 'Waiting' && selected.strRClientStatus ==''
+                                                                    button.btn.btn-warning(type='submit' name='btn1' value='cancelsendtohw')
+                                                                        i.fa.fa-times  
+                                                                        |  Cancel Request
+                                                                else if selected.strRHWStatus == 'Approved' && selected.strRClientStatus ==''
+                                                                    button.btn.btn-success(type='submit' name='btn1' value='sendtoclient')
+                                                                        i.fa.fa-envelope 
+                                                                        |  Send to Client
+                                                                else if selected.strRHWStatus == 'Rejected' && selected.strRClientStatus ==''
+                                                                    button.btn.btn-danger(type='submit' name='btn1' value='removefromlist')
+                                                                        i.fa.fa-eye-lash 
+                                                                        |  Remove
+                        
+                                center
+                                    h5 For Client's Approval
+                                .row
+                                    each selected in selectedtab
+                                        if selected.strRClientStatus !=''
+                                            .col-md-4.col-sm-4.col-xs-12.profile_details
+                                                .well.profile_view
+                                                    .col-sm-12
+                                                        h4.brief
+                                                            i #{selected.strName}: #{selected.intRHWID}
+                                                        .left.col-xs-7
+                                                            h2 Name
+                                                            p
+                                                                | Age:
+                                                                strong   
+                                                            ul.list-unstyled
+                                                                li
+                                                                    | Gender: 
+                                                                    b 
+                                                                li
+                                                                    | Status: #{selected.strRClientStatus}
+                                                                    b 
+                                                        .right.col-xs-5.text-center
+                                                            img.img-circle.img-responsive(src='/assets/gentelella/production/images/alexis.jpg', alt='', style='width:100px; height:100px')
+                                                    .col-xs-12.bottom.text-center
+                                                        //- .col-xs-12.col-sm-4.emphasis
+                                                            .x_panel
+                                                                input#check-all.flat(type='checkbox')
+                                                        .col-xs-12.col-sm-8.emphasis
+                                                            a(href='/admin/hw_profile_'+selected.intRRequestID+selected.intRHWID)
+                                                                button.btn.btn-primary(type='button')
+                                                                    i.fa.fa-user  
+                                                                    |  View Profile
+                                                        .col-xs-12.col-sm-8.emphasis
+                                                            if selected.strRHWStatus == 'Approved' && ((selected.strRClientStatus =='Waiting') || (selected.strRClientStatus =='Approved'))
+                                                                //- button.btn.btn-primary(type='button')
+                                                                //-     i.fa.fa-user  
+                                                                //-     |  View Profile
+                                                            else if selected.strRHWStatus == 'Approved' && selected.strRClientStatus =='Rejected'
+                                                                button.btn.btn-danger(type='button')
+                                                                    i.fa.fa-times 
+                                                                    |  Remove
+                            else
+                                center
+                                    h5 Client's Approved Services
+                                .row
+                                    each selected in selectedtab
+                                        if selected.strRClientStatus =='Approved'
+                                            .col-md-4.col-sm-4.col-xs-12.profile_details
+                                                .well.profile_view
+                                                    .col-sm-12
+                                                        h4.brief
+                                                            i #{selected.strName}: #{selected.intRHWID}
+                                                        .left.col-xs-7
+                                                            h2 Name
+                                                            p
+                                                                | Age:
+                                                                strong   
+                                                            ul.list-unstyled
+                                                                li
+                                                                    | Gender: 
+                                                                    b 
+                                                                li
+                                                                    | Status: #{selected.strRClientStatus}
+                                                                    b 
+                                                        .right.col-xs-5.text-center
+                                                            img.img-circle.img-responsive(src='/assets/gentelella/production/images/alexis.jpg', alt='', style='width:100px; height:100px')
+                                                    .col-xs-12.bottom.text-center
+                                                        //- .col-xs-12.col-sm-4.emphasis
+                                                            .x_panel
+                                                                input#check-all.flat(type='checkbox')
+                                                        .col-xs-12.col-sm-8.emphasis
+                                                            a(href='/admin/hw_profile_'+selected.intRRequestID+selected.intRHWID)
+                                                                button.btn.btn-primary(type='button')
+                                                                    i.fa.fa-user  
+                                                                    |  View Profile
+                            
     //- modals
     #view_item.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-hidden='true')
         .modal-dialog.modal-sm

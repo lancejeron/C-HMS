@@ -33,7 +33,7 @@ html(lang='en')
                 | &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 //- img(src='../admin/gentelella/production/images/mega.png', width='150', height='65')
                 a.site_title(href='')
-                  img(src='../admin/gentelella/production/images/mega.png',width='150', height='65')              
+                  //- img(src='../admin/gentelella/production/images/mega.png',width='150', height='65')              
               // menu profile quick info
               .profile.clearfix
                 .profile_pic
@@ -59,17 +59,17 @@ html(lang='en')
                         span.fa.fa-chevron-down
                       ul.nav.child_menu
                         li
-                          a(href='/admin/maintenance_type_of_services') Services
-                        li
                           a(href='/admin/maintenance_requirements') Requirements
                         li
-                          a(href='/admin/maintenance_city') City
+                          a(href='/admin/maintenance_type_of_services') Services
                         li
                           a(href='/admin/maintenance_householdworker_skills') Household Worker Skills
                         li
                           a(href='/admin/maintenance_incident_report') Incident report                     
                         li
                           a(href='/admin/maintenance_type_of_leave') Leave              
+                        li
+                          a(href='/admin/maintenance_city') City
                     li
                       a
                         i.fa.fa-exchange
@@ -84,7 +84,7 @@ html(lang='en')
                             li.sub_menu
                               a(href='client_list') Client
                             li.sub_menu 
-                              a(href='registration_household_worker') Household Worker
+                              a(href='householdworker_list') Household Worker
                             //- li.sub_menu
                             //-   a(href='transaction_pending_registration') Pending Registration   
                         
@@ -118,6 +118,8 @@ html(lang='en')
                       ul.nav.child_menu
                         li
                           a(href='utilities_staff') Staff
+                        li
+                          a(href='utilities_fees') Fees
                     li
                       a
                         i.fa.fa-pie-chart
@@ -268,7 +270,7 @@ html(lang='en')
           // footer content
           footer
               .pull-right
-                  | Mega Pacific Employment Services 2017
+                  | Client And Household Worker Management System
               .clearfix
           // /footer content
           
@@ -349,6 +351,18 @@ html(lang='en')
             });
             $('#datatable2').DataTable();
             $('#datatable3').DataTable();
+            //- utilities
+            $('#edit_fee').on('show.bs.modal', function (event) {
+              var button = $(event.relatedTarget)
+              var id = button.data('id')
+              var name = button.data('name')
+              var fee = button.data('fee')
+
+              var modal = $(this)
+              modal.find('.modal-body #_id').val(id)
+              modal.find('.modal-body #_name').val(name)
+              modal.find('.modal-body #_fee').val(fee)
+            });
 
             //- transaction view request modal
             $('#view_item').on('show.bs.modal', function (event) {
@@ -368,3 +382,30 @@ html(lang='en')
                 modal.find('.modal-body #e').text(' '+e)
                 modal.find('.modal-body #f').text(' '+f)
             });
+
+            //- settle transcation
+            $('#settle').on('show.bs.modal', function (event) {
+              var button = $(event.relatedTarget)
+              var id = button.data('id')
+
+              var modal = $(this)
+              modal.find('.modal-body #_id').val(id)
+              modal.find('.modal-header #a').text(id)
+            });
+
+            //- $($this.buttons.finish).click(function() {
+            //-   if(!$(this).hasClass('buttonDisabled')){
+            //-       if($.isFunction($this.options.onFinish)) {
+            //-           var context = { fromStep: $this.curStepIdx + 1 };
+            //-           if(!$this.options.onFinish.call(this,$($this.steps), context)){
+            //-               return false;
+            //-           }
+            //-       }else{
+            //-           var frm = $this.target.parents('form');
+            //-           if(frm && frm.length){
+            //-               frm.submit.OnClick(f)(method='POST' action='register_householdworker');
+            //-           }
+            //-       }
+            //-   }
+            //-     return false;
+            //- });

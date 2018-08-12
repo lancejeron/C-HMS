@@ -1,6 +1,8 @@
 var express = require('express');
 var flog = require( '../login/loggedin');
 var router = express.Router();
+var moment = require('moment');
+
 
 //Request Add Page
 function render(req,res){
@@ -14,11 +16,18 @@ function render(req,res){
 function findlist(req, res, next){
     var db = require('../../lib/database')();
     db.query("SELECT * FROM tblfinalrequest WHERE intRequest_ClientID=?",[req.session.user], function (err, results) {
+      console.log('xxxxxxxxxxxxxxxxxxxxx'+results);
+      for(var i = 0; i < results.length; i++){
+
+        results[i].datRequestDate =  moment(results[i].datRequestDate).format("LL");
+        results[i].datRequestNeedDate =  moment(results[i].datRequestNeedDate).format("LL");
+            
+      }
       if (err) return res.send(err);
-      if (!results[0])
-      // results[0].date= results[0].datRequestDate.toDateString("en-US").slice(4, 15);
-      console.log('');
       req.list = results;
+      // console.log(req.list.datRequestDate)
+
+
       return next();
     });
   }
@@ -37,7 +46,7 @@ router.get('/createlist_services', flog, rendercreatelist_services);
 
 router.post('/createlist_services/createlist', flog, (req, res) => {
   var db = require('../../lib/database')();
-  db.query(`INSERT INTO tblfinalrequest (intRequest_ClientID, strRequestType,strRequestName, strRequestDesc, datRequestDate, strRequestStatus)  VALUES ("${req.session.user}", "Add", "${req.body.reqname}", "${req.body.reqdesc}", "${req.body.reqdate}", "Draft")`, (err) => {
+  db.query(`INSERT INTO tblfinalrequest (intRequest_ClientID, strRequestType,strRequestName, strRequestDesc, datRequestDate, strRequestStatus, datRequestNeedDate)  VALUES ("${req.session.user}", "Add", "${req.body.reqname}", "${req.body.reqdesc}", "${req.body.reqdate}", "Draft", "${req.body.dateneed}")`, (err) => {
     if (err) console.log(err);
       res.redirect('/request_add');
     });
@@ -47,7 +56,7 @@ router.post('/createlist_services/createlist', flog, (req, res) => {
 // My list Page
 function rendermylist(req,res){
     if(req.valid==1)
-      res.render('request_add/views/mylist',{usertab: req.user, itemtab: req.item, listtab: req.list, counttab:req.count, servicetab: req.service, skilltab: req.skill, hwtab: req.hw});
+      res.render('request_add/views/mylist',{usertab: req.user, itemtab: req.item, listtab: req.list, counttab:req.count, servicetab: req.service, skilltab: req.skill, hwtab: req.hw, noofapprovetab: req.noofapprove, feetab: req.fee});
     else if(req.valid==0)
       res.render('admin/views/invalidpages/normalonly');
     else
@@ -93,7 +102,26 @@ function findcreatedlist(req, res, next){
       return next();
     });
   }
-  router.get('/mylist_:userid', flog, findcreatedlist, findcreateditem, findcountcreateditem, findmservice, findskills, findresult, rendermylist);
+  function findapprove(req, res, next){
+    var db = require('../../lib/database')();
+    db.query(`SELECT COUNT(*) AS NOOFapprove FROM tblresults WHERE strRClientStatus='Approved' AND intRRequestID ='${req.params.userid}'`, function (err, results) {
+      if (err) return res.send(err);
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'+req.params.userid);
+      req.noofapprove= results;
+      return next();
+    });
+  }
+  function findfees(req, res, next){
+    var db = require('../../lib/database')();
+    db.query("SELECT * FROM tblfee WHERE intID NOT IN('1','4')", function (err, results) {
+      if (err) return res.send(err);
+      if (!results[0])
+      console.log('');
+      req.fee= results;
+      return next();
+    });
+  }
+  router.get('/mylist_:userid', flog, findcreatedlist, findcreateditem, findcountcreateditem, findmservice, findskills, findresult, findapprove, findfees, rendermylist);
 
 
 // Add service to list
@@ -145,7 +173,7 @@ router.get('/submit_request_:requestid',flog,submitrequest);
 function findresult(req,res,next){
   var db = require('../../lib/database')();
   db.query(`SELECT strName, strFName, strLName, strGender, strPicture, strRClientStatus, intRHWID, intRRequestID, intRRequest_No, intRHWID, TIMESTAMPDIFF(YEAR,datBirthDay,CURDATE()) AS age FROM tblresults AS a INNER JOIN tbluser AS b ON a.intRHWID = b.intID INNER JOIN tblhouseholdworker AS c ON b.intID=c.intHWID INNER JOIN tblmservice AS d ON d.intID = c.intServiceID
-              WHERE strRHWStatus = 'Approved' AND strRClientStatus IN ('Waiting', 'Approved', 'Rejected') AND intRRequestID = ?`,[req.params.userid], function (err, results) {
+              WHERE strRHWStatus = 'Approved' AND strRClientStatus IN ('Approved') AND intRRequestID = ?`,[req.params.userid], function (err, results) {
     if (err) return res.send(err);
     if (!results[0])
     console.log('xxxxxxxxxxxxxxxxxxxx'+req.params.requestid);
@@ -215,57 +243,162 @@ function findhwwork(req,res,next){
   });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.get('/createlist_set_preferences', flog, findmservice, rendercreatelist_set_preferences);
-
-// router.post('/add_to_list',(req, res) => {
-//   if(req.body.add=="add_another"){
-//     // var db = require('../../lib/database')();
-//     // db.query(`INSERT INTO tblmincidentreport (strName, strDesc, strStatus)  VALUES ("${req.body.incidentname}", "${req.body.incidentdesc}", "Active")`, (err) => {
-//     // if (err) console.log(err);
-//     //   res.render('/request_add/createlist_results');
-//     //   });
-//     console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-//   }
-//   else if(req.body.add=="finish"){
-//     // var db = require('../../lib/database')();
-//     // db.query(`INSERT INTO tblmincidentreport (strName, strDesc, strStatus)  VALUES ("${req.body.incidentname}", "${req.body.incidentdesc}", "Active")`, (err) => {
-//     // if (err) console.log(err);
-//     //   res.render('/request_add/createlist_results');
-//     // });
-//     console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ');
-//   }
-  
-// });
-
-function rendercreatelist_results(req,res){
-  // if(req.valid==1)
-  //   res.render('request_add/views/createlist_results',{usertab: req.user});
-  // else if(req.valid==0)
-  //   res.render('admin/views/invalidpages/normalonly');
-  // else
-  //   res.render('login/views/invalid');
+// -----------------------------------------------------------------------------VIEW LIST RESULT
+router.get('/result_:userid:requestno', flog, findviewlist, findcreatedlist, renderviewlist)
+function findviewlist(req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT strName, strFName, strLName, strGender, strPicture, strRClientStatus, intRHWID, intRRequestID, intRRequest_No, intRHWID, TIMESTAMPDIFF(YEAR,datBirthDay,CURDATE()) AS age FROM tblresults AS a INNER JOIN tbluser AS b ON a.intRHWID = b.intID INNER JOIN tblhouseholdworker AS c ON b.intID=c.intHWID INNER JOIN tblmservice AS d ON d.intID = c.intServiceID
+              WHERE strRHWStatus = 'Approved' AND strRClientStatus IN ('Waiting', 'Rejected', 'Approved') AND intRRequestID = ? AND intRRequest_No = ?`,[req.params.userid, req.params.requestno], function (err, results) {
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('xxxxxxxxxxxxxxxxxxxx'+req.params.userid);
+    req.hw= results;
+    return next();
+  });
 }
-router.get('/createlist_results', flog, rendercreatelist_results);
+function renderviewlist(req,res){
+  if(req.valid==1)
+    res.render('request_add/views/mylist_viewlist',{usertab: req.user, hwtab: req.hw, listtab: req.list});
+  else if(req.valid==0)
+    res.render('admin/views/invalidpages/normalonly');
+  else
+    res.render('login/views/invalid');
+}
+
+// ---------------------------------------------------------------------DEPLOYMENT PROCESS
+router.post('/contract', flog, findcreatedlist2);
+function findcreatedlist2(req, res){
+  var db = require('../../lib/database')();
+  var db2 = require('../../lib/database')();
+  var db3 = require('../../lib/database')();
+  db.query("SELECT * FROM tbltransaction WHERE intTRequestID=?",[req.body.transid], function (err, results) {
+    console.log(err);
+    if (!results[0]){
+      db2.query(`INSERT INTO tbltransaction VALUES ('${req.body.transid}', '${req.session.user}', '${req.body.reqdate}', '${req.body.dep}', '${req.body.datedep}', '${req.body.timedep}', '', '', NULL, '','','${req.body.invnum}')`, function(err){
+        console.log(err);
+        res.redirect('/request_add/contract_'+req.body.transid,flog, findcreatedlist, rendercontract)
+      })  
+    }
+    else{
+      db3.query(`UPDATE tbltransaction SET datDateRequested='${req.body.reqdate}', intTypeofDeployment='${req.body.dep}', datDateofDeployment='${req.body.datedep}', timTimeofDeployment='${req.body.timedep}' WHERE intTClientID = '${req.session.user}' AND intTRequestID = '${req.body.transid}'`,function(err){
+        console.log(err);
+        res.redirect('/request_add/contract_'+req.body.transid,flog,findcreatedlist, rendercontract)
+      })
+    }
+  });
+}
+
+router.get('/contract_:userid',flog, findcreatedlist, rendercontract);
+function rendercontract(req,res){
+  if(req.valid==1)
+    res.render('request_add/views/contract',{usertab: req.user, listtab: req.list});
+  else if(req.valid==0)
+    res.render('admin/views/invalidpages/normalonly');
+  else
+    res.render('login/views/invalid');
+}
+
+router.post('/deccontract',flog, contractstatus);
+function contractstatus (req,res){
+  var db = require('../../lib/database')();
+  var db2 = require('../../lib/database')();
+  console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
+  if(req.body.btn1 == 'accept'){
+    db.query(`UPDATE tbltransaction SET strContractStatus = 'Accepted' WHERE intTClientID = '${req.session.user}' AND intTRequestID = '${req.body.transid}'`,function(err){
+      console.log(err);
+      db.query(`UPDATE tblfinalrequest SET strRequestStatus = 'Pending' WHERE intRequest_ClientID = '${req.session.user}' AND intRequestID = '${req.body.transid}'`,function(err){
+        console.log(err);
+        res.redirect('/request_add/invoice_'+req.body.transid);
+      })
+    })
+  }
+}
+
+//------------------------------------------------------------------------------------------- INVOICE 
+router.get('/invoice_:userid',flog, findagency, findclient, findtrans, finditems, findagencyfee, findotherfee, renderinvoice);
+function renderinvoice(req,res){
+  if(req.valid==1)
+    res.render('request_add/views/invoice',{usertab: req.user, agencytab: req.agency, clienttab: req.client, dctab: req.dc, itemtab: req.item, agencyftab: req.agencyf, otherfeetab: req.otherfee});
+  else if(req.valid==0)
+    res.render('admin/views/invalidpages/normalonly');
+  else
+    res.render('login/views/invalid');
+}
+
+function findagency(req,res,next){
+  var db = require('../../lib/database')();
+  db.query("SELECT * FROM tblagency",[req.params.hwid], function (err, results) {
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.agency = results;
+    return next();
+  });
+}
+
+function findclient(req,res,next){
+  var db = require('../../lib/database')();
+  db.query("SELECT b.*, strFName, strLName, strEmail FROM tbluser as a inner join tblclient as b on a.intID=b.intClientID where intID = ?",[req.session.user], function (err, results) {
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.client = results;
+    return next();
+  });
+}
+
+function findtrans (req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT datDateRequested, strInvoiceNum FROM tbltransaction WHERE intTRequestID = ?`,[req.params.userid], function (err, results) {
+
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    for(var i = 0; i < results.length; i++){
+      results[i].datDateRequested =  moment(results[i].datDateRequested).format("LL");   
+    }
+    if (err) return res.send(err);
+    req.dc = results;
+    return next();
+  });
+}
+
+function finditems(req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT intServiceID,strName, COUNT(intServiceID) AS service, deciRate, (COUNT(intServiceID)*deciRate) as Rate FROM
+            (SELECT * FROM tblresults INNER JOIN tblhouseholdworker ON intHWID = intRHWID INNER JOIN tblmservice ON intServiceID = intID WHERE strRClientStatus ='Approved' and intRRequestID=?) as ta
+            GROUP BY intServiceID `,[req.params.userid], function (err, results) {
+
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.item = results;
+    return next();
+  });
+}
+function findagencyfee(req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT * FROM tblfee WHERE intID = 1`, function (err, results) {
+
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.agencyf = results;
+    return next();
+  });
+}
+function findotherfee(req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT intTypeofDeployment, strName, fltFee, intTRequestID FROM tblfee INNER JOIN tbltransaction ON intID = intTypeofDeployment WHERE intTRequestID = ?`,[req.params.userid], function (err, results) {
+
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.otherfee = results;
+    return next();
+  });
+}
+
 
 function rendercreatelist_summary(req,res){
   if(req.valid==1)

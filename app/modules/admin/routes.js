@@ -1,6 +1,7 @@
 var express = require('express');
 var flog = require( '../login/loggedin');
 var router = express.Router();
+var moment = require('moment');
 
 //-------------------------------------------------------------------------------------DASHBOARD
 function render(req,res){
@@ -386,16 +387,34 @@ function rendertransclient(req,res){
 }
 function findclientrequest(req,res,next){
   var db = require('../../lib/database')();
-  db.query(`SELECT CONCAT(b.strLName,', ', b.strFName) AS strName, strRequestType, datRequestDate, strRequestStatus, intRequestID FROM tblfinalrequest as a INNER JOIN tbluser as b ON a.intRequest_ClientID = b.intID WHERE a.strRequestStatus = 'On process' ORDER BY intRequestID Desc`, function (err, results) {
+  db.query(`SELECT CONCAT(b.strLName,', ', b.strFName) AS strName, strRequestType, datRequestDate, datRequestNeedDate, strRequestStatus, intRequestID FROM tblfinalrequest as a INNER JOIN tbluser as b ON a.intRequest_ClientID = b.intID WHERE a.strRequestStatus IN ('On process', 'On contract', 'Pending') ORDER BY intRequestID Desc`, function (err, results) {
     if (err) return res.send(err);
     if (!results[0])
     console.log('');
+    for(var i = 0; i < results.length; i++){
+      results[i].datRequestDate =  moment(results[i].datRequestDate).format("LL");
+      results[i].datRequestNeedDate =  moment(results[i].datRequestNeedDate).format("LL");   
+    }
     req.request = results;
     return next();
   });
 
 }
 router.get('/transaction_client_request', flog, findclientrequest, rendertransclient);
+
+router.post('/transactionrequestdecision',flog, clientrequestdecision);
+function clientrequestdecision(req,res){
+  var db = require('../../lib/database')();
+  if(req.body.btn1='approve'){
+    db.query(`UPDATE tblfinalrequest SET strRequestStatus ='Approved' WHERE intRequestID='${req.body.transid}'`, function (err) {
+      console.log(err);
+      res.redirect('/admin/transaction_client_request')
+    });
+  }
+  else{
+
+  }
+}
 
 //------------------------------------------------------------------------------------ TRANSACTION: Client Request(specific)
 function rendertransclientspecific(req,res){
@@ -439,7 +458,7 @@ function findclient(req,res,next){
 }
 function findselected(req,res,next){
   var db = require('../../lib/database')();
-  db.query("SELECT * FROM tblresults WHERE intRRequestID=?",[req.params.requestid], function (err, results) {
+  db.query("SELECT * FROM tblmservice INNER JOIN tblhouseholdworker ON intID = intServiceID INNER JOIN tblresults ON intRHWID = intHWID WHERE intRRequestID=?",[req.params.requestid], function (err, results) {
     if (err) return res.send(err);
     if (!results[0])
     console.log('');
@@ -622,33 +641,74 @@ function findhwwork(req,res,next){
     return next();
   });
 }
-
-
 router.get('/hw_profile_:requestid:hwid', flog, findhw, findhweduc, findhwwork,  findclientrequestspecific, renderhwprofile)
 
 
-// --------------------------------------------------------------------------------TRANSACTIONS TO SETTLE
+
+
+// --------------------------------------------------------------------------------TRANSACTIONS SETTLEMENT
+router.get('/transaction_settle', flog, findtranssettle, rendertranssettle);
 function rendertranssettle(req,res){
   if(req.valid==0)
-    res.render('admin/views/transaction_settle',{usertab: req.user});
+    res.render('admin/views/transaction_settle',{usertab: req.user, listtab: req.list});
   else if(req.valid==1)
     res.render('admin/views/invalidpages/normalonly');
   else
     res.render('login/views/invalid');
 }
-router.get('/transaction_settle', flog, rendertranssettle);
+function findtranssettle(req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT CONCAT(b.strLName,', ', b.strFName) AS strName, strRequestType, datRequestDate, datRequestNeedDate, strRequestStatus, intRequestID FROM tblfinalrequest as a INNER JOIN tbluser as b ON a.intRequest_ClientID = b.intID WHERE a.strRequestStatus IN ('Approved') ORDER BY intRequestID Desc`, function (err, results) {
+    console.log(err)
+    for(var i = 0; i < results.length; i++){
+      results[i].datRequestDate =  moment(results[i].datRequestDate).format("LL");
+      results[i].datRequestNeedDate =  moment(results[i].datRequestNeedDate).format("LL");   
+    }
+    req.list = results;
+    return next();
+  });
+}
 
-//----------------------------------------------------------------------------------
+router.post('/transaction_settledecision',flog, clientsettledecision);
+function clientsettledecision(req,res){
+  var db = require('../../lib/database')();
+  var db2 = require('../../lib/database')();
+  if(req.body.btn1='settle'){
+    db2.query(`UPDATE tbltransaction SET strORNumber=?, datDateSettled=?, strTStatus='On-going' WHERE intTRequestID='${req.body.transid}'`,[req.body.ornum, req.body.datesettled], function (err) {
+      console.log(err);
+      db.query(`UPDATE tblfinalrequest SET strRequestStatus ='Finished' WHERE intRequestID='${req.body.transid}'`, function (err) {
+      console.log(err);
+        res.redirect('/admin/transaction_settle')
+      });
+    });
+  }
+  else{
+    
+  }
+}
+//----------------------------------------------------------------------------------TRANSACTIONS SETTLED
+router.get('/transaction_settled', flog, findtranssettled, rendertranssettled);
 function rendertranssettled(req,res){
   if(req.valid==0)
-    res.render('admin/views/transaction_settled',{usertab: req.user});
+    res.render('admin/views/transaction_settled',{usertab: req.user, listtab: req.list});
   else if(req.valid==1)
     res.render('admin/views/invalidpages/normalonly');
   else
     res.render('login/views/invalid');
 }
-router.get('/transaction_settled', flog, rendertranssettled);
 
+function findtranssettled (req,res,next){
+  var db = require('../../lib/database')();
+  db.query(`SELECT CONCAT(b.strLName,', ', b.strFName) AS strName, intTRequestID, datDateSettled, strTStatus, DATE_ADD(datDateSettled, INTERVAL 6 MONTH) AS dateexpire FROM tbltransaction as a INNER JOIN tbluser as b ON a.intTClientID = b.intID WHERE a.strTStatus IN ('On-going') ORDER BY datDateSettled Desc`, function (err, results) {
+    console.log(err)
+    for(var i = 0; i < results.length; i++){
+      results[i].datDateSettled =  moment(results[i].datDateSettled).format("LL");
+      results[i].dateexpire =  moment(results[i].dateexpire).format("LL");   
+    }
+    req.list = results;
+    return next();
+  });
+}
 // --------------------------------------------------------------------------------TRANSACTIONS INVOICE
 function rendertransinvoice(req,res){
   if(req.valid==0)
@@ -683,14 +743,25 @@ function regifindclientlist(req, res, next){
 }
 function renderregiclientlist(req,res){
   if(req.valid==0)
-    res.render('admin/views/client_list',{usertab: req.user, itemtab: req.item});
+    res.render('admin/views/client_list',{usertab: req.user, itemtab: req.item, requirementtab: req.requirement});
   else if(req.valid==1)
     res.render('admin/views/invalidpages/normalonly');
   else
     res.render('login/views/invalid');
 
 }
-router.get('/client_list', flog, regifindclientlist, renderregiclientlist);
+
+function findmrequirements2(req, res, next){
+  var db = require('../../lib/database')();
+  db.query("SELECT * FROM tblmrequirements ", function (err, results) {
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.requirement = results;
+    return next();
+  });
+}
+router.get('/client_list', flog, regifindclientlist, findmrequirements2, renderregiclientlist);
 
 // Approve client and reject client2
 function approveClient2(req,res){
@@ -762,7 +833,15 @@ function renderregistrationHW(req,res){
     res.render('login/views/invalid');
 
 }
-router.get('/registration_household_worker', flog, renderregistrationHW);
+router.get('/registration_household_worker', flog, findmservice, renderregistrationHW);
+
+router.post('/register_householdworker',(req, res) => {
+  var db = require('../../lib/database')();
+  db.query(``, (err) => {
+    if (err) console.log(err);
+  });
+  res.redirect('/admin/registration_household_worker');
+});
 
 //--------------------------------------------------------------------------------CLIENT REGISTRATION
 function renderregistrationClient(req,res){
@@ -915,7 +994,7 @@ router.get('/ban_householdworker/:userid',flog,banHW);
 
 function findhwlist(req, res, next){
   var db = require('../../lib/database')();
-  db.query("SELECT *, CONCAT(strFName,' ', strLName) AS strName FROM tbluser WHERE strType='Household Worker' AND strStatus NOT IN ('Unregistered')", function (err, results) {
+  db.query("SELECT *, CONCAT(strFName,' ', strLName) AS strName FROM tbluser WHERE strType='Household Worker'", function (err, results) {
     if (err) return res.send(err);
     if (!results[0])
     console.log('');
@@ -999,6 +1078,7 @@ function findustaff(req, res, next){
     return next();
   });
 }
+
 function renderutilitiesStaff(req,res){
   if(req.valid==0)
     res.render('admin/views/utilities_staff',{usertab: req.user, itemtab: req.item});
@@ -1017,7 +1097,24 @@ router.post('/add_staff',(req, res) => {
     });
 });
 
-
-
+router.get('/utilities_fees', flog, findfees, renderutilfees);
+function renderutilfees(req,res){
+  if(req.valid==0)
+    res.render('admin/views/utilities_fees',{usertab: req.user, itemtab: req.item});
+  else if(req.valid==1)
+    res.render('admin/views/invalidpages/normalonly');
+  else
+    res.render('login/views/invalid');
+}
+function findfees(req, res, next){
+  var db = require('../../lib/database')();
+  db.query("SELECT * FROM tblfee", function (err, results) {
+    if (err) return res.send(err);
+    if (!results[0])
+    console.log('');
+    req.item = results;
+    return next();
+  });
+}
 
 exports.admin= router;
